@@ -1,0 +1,104 @@
+User:
+-Id
+-username
+-email
+-password
+-active: Boolean
+-Role:
+admin
+moderator,
+
+client
+-bank accounts[bank account]
+-cart[item]
+-purchaseHistory[order]
+
+auth, insert, update, changePassword, getById, getList()
+
+BankAccount:
+-Id,
+-BankName: string
+-Number: string
+-User
+
+insert, getList(userId), delete, update (only client)
+
+Store:
+-Id
+-Address
+-Items[item]
+-UserId
+-Active
+
+insert, update, getList(UserId), getList(), getById, changeActive
+
+Image:
+-Id
+-URL: string
+-ItemId
+
+Item:
+-Id
+-Title
+-Images: Image
+-Description
+-Category
+Vehicles
+SportAndHobby
+Clothes
+Pets
+Electronics
+Games
+Antiques
+Other
+-Price: BigDecimal !!!
+-CreateDate
+-ChangeDate
+-Sale: Sale
+-StoreId
+
+ItemList: (filters)?
+-Id
+-Title
+-Images: [Image]
+-Description
+-Category
+-Price: BigDecimal
+-PriceWithSale?
+-CreateDate
+-ChangeDate
+-StoreId
+
+insert, getList(), getList(storeId), getList(category) WITH PAGINATION, delete, update
+
+Sale:
+-Id
+-startDate
+-EndDate
+-Percent
+-Item: Item
+
+getList(itemId), insert, update, delete
+
+DeliveryCompany:
+-Id,
+-Name,
+-DeliveryFee: BigDecimal
+
+insert, update, delete, getList()
+
+Order:
+-Id
+-Items: [Item]
+// NumberOfItems - we get it from the ItemList
+-TotalPrice: (can be double)
+-Status
+Created
+Ready for Courier
+Waiting For Pickup
+Completed
+-DeliveryCompany: DeliveryCompany
+-CreateDate
+-ChangeDate
+
+insert, getList(userId), getList(storeId), getList(), update
