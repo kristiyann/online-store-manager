@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -38,10 +39,10 @@ public class UsersController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<UUID> insertUser(@RequestBody User user) {
-        UUID userId = usersService.insertUser(user);
-        return new ResponseEntity<>(userId, HttpStatus.CREATED);
+    @GetMapping("/All")
+    public ResponseEntity<List<UserList>> getUserList() {
+        List<UserList> users = usersService.findAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/Auth")
@@ -54,6 +55,12 @@ public class UsersController {
         else{
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PostMapping
+    public ResponseEntity<UUID> insertUser(@RequestBody User user) {
+        UUID userId = usersService.insertUser(user);
+        return new ResponseEntity<>(userId, HttpStatus.CREATED);
     }
 
     @PutMapping("/UpdatePassword")
