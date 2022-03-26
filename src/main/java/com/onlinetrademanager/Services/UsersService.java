@@ -10,7 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Services are a layer in the MVC design architecture which is used for building this application.
@@ -44,6 +46,13 @@ public class UsersService {
                 .map(this::convertModelToUserList)
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("User " + id + " not found."));
+    }
+
+    public List<UserList> findAllUsers() {
+        return usersRepository.findAll()
+                .stream()
+                .map(this::convertModelToUserList)
+                .collect(Collectors.toList());
     }
 
     //    public UserList updateUser(User user) {
@@ -96,20 +105,20 @@ public class UsersService {
         userList.setEmail(user.getEmail());
         userList.setActive(user.isActive());
         userList.setRole(user.getRole());
+        userList.setDtype(user.getDtype());
 
         return userList;
     }
 
-    private User convertUserListToModel(UserList model) {
-        User user = new User();
-
-        user.setId(model.getId());
-        user.setUsername(model.getUsername());
-        user.setEmail(model.getEmail());
-        user.setActive(model.isActive());
-        user.setRole(model.getRole());
-
-        return user;
-    }
-
+//    private User convertUserListToModel(UserList model) {
+//        User user = new User();
+//
+//        user.setId(model.getId());
+//        user.setUsername(model.getUsername());
+//        user.setEmail(model.getEmail());
+//        user.setActive(model.isActive());
+//        user.setRole(model.getRole());
+//
+//        return user;
+//    }
 }

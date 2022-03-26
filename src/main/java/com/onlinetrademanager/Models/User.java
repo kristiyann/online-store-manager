@@ -79,6 +79,10 @@ public class User implements Serializable {
         return role;
     }
 
+    public String getDtype() {
+        return dtype;
+    }
+
     public void setId(UUID id) {
         this.id = id;
     }
@@ -101,6 +105,10 @@ public class User implements Serializable {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public void setDtype(String dtype) {
+        this.dtype = dtype;
     }
 
     @Override

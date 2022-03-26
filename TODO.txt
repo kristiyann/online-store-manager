@@ -1,19 +1,9 @@
-User:
--Id
--username
--email
--password
--active: Boolean
--Role:
-admin
-moderator,
-
 client
 -bank accounts[bank account]
 -cart[item]
 -purchaseHistory[order]
 
-auth, insert, update, changePassword, getById, getList()
+update user + client
 
 BankAccount:
 -Id,

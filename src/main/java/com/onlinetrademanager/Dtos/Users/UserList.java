@@ -10,6 +10,7 @@ public class UserList {
     private String email;
     private boolean active;
     private UserRole role;
+    private String dtype;
 
     public UserList() {
     }
@@ -34,6 +35,10 @@ public class UserList {
         return role;
     }
 
+    public String getDtype() {
+        return dtype;
+    }
+
     public void setId(UUID id) {
         this.id = id;
     }
@@ -52,5 +57,9 @@ public class UserList {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public void setDtype(String dtype) {
+        this.dtype = dtype;
     }
 }
