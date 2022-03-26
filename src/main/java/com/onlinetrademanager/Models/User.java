@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -41,9 +42,8 @@ public class User implements Serializable {
     @Enumerated
     private UserRole role;
 
-    // private HashSet<BankAccount> bankAccounts;
-    // private HashSet<Item> cart;
-    // private HashSet<Order> purchaseHistory;
+    @Column(updatable = false, insertable = false)
+    private String dtype;
 
     public User() { }
 
