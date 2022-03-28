@@ -1,5 +1,6 @@
 package com.onlinetrademanager.Controllers;
 
+import com.onlinetrademanager.Dtos.Users.UserAuth;
 import com.onlinetrademanager.Dtos.Users.UserList;
 import com.onlinetrademanager.Dtos.Users.UserPasswordEdit;
 import com.onlinetrademanager.Models.User;
@@ -21,7 +22,7 @@ import java.util.UUID;
  * We can pass parameters in two ways:
  * @PathVariable - requires the parameters to be set in the address string
  * @RequestBody - requires the parameters to be set in the JSON body
- * The current controller is used for operations on User (Patient or Employee).
+ * The current controller is used for operations on User.
  * **/
 
 @RestController
@@ -46,8 +47,8 @@ public class UsersController {
     }
 
     @GetMapping("/Auth")
-    public ResponseEntity<UUID> getUserByUserDetails(@RequestParam String email, @RequestParam String password) {
-        User user = usersService.authUser(email, password);
+    public ResponseEntity<UUID> getUserByUserDetails(@RequestBody UserAuth userAuth) {
+        User user = usersService.authUser(userAuth);
 
         if (user != null){
             return new ResponseEntity<>(user.getId(), HttpStatus.OK);
@@ -63,9 +64,9 @@ public class UsersController {
         return new ResponseEntity<>(userId, HttpStatus.CREATED);
     }
 
-    @PutMapping("/UpdatePassword")
-    public ResponseEntity<UserList> updateUserPassword(@RequestBody UserPasswordEdit user) {
-        UserList updatedUser = usersService.updateUserPassword(user);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-    }
+//    @PutMapping("/UpdatePassword")
+//    public ResponseEntity<UserList> updateUserPassword(@RequestBody UserPasswordEdit user) {
+//        UserList updatedUser = usersService.updateUserPassword(user);
+//        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+//    }
 }

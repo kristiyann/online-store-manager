@@ -1,5 +1,6 @@
 package com.onlinetrademanager.Services;
 
+import com.onlinetrademanager.Dtos.Users.UserAuth;
 import com.onlinetrademanager.Dtos.Users.UserList;
 import com.onlinetrademanager.Dtos.Users.UserPasswordEdit;
 import com.onlinetrademanager.Exceptions.NotFoundException;
@@ -86,10 +87,10 @@ public class UsersService {
                 .orElseThrow(() -> new NotFoundException("User with email:" + email + " not found (Deleted or does not exist)."));
     }
 
-    public User authUser(String email, String password) {
-        User user = findUserByEmail(email);
+    public User authUser(UserAuth userAuth) {
+        User user = findUserByEmail(userAuth.getEmail());
 
-        if (BCrypt.checkpw(password, user.getPassword()) && user.isActive()) {
+        if (BCrypt.checkpw(userAuth.getPassword(), user.getPassword()) && user.isActive()) {
             return user;
         }
         else return null;
