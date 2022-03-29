@@ -35,5 +35,5 @@ Required Body:  {
                 "email": ,
                 "password": ,
                 "active": ,
-                "role": ,
+                "role": ("ADMINISTRATOR" or "MODERATOR"),
                 }
