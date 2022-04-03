@@ -1,9 +1,11 @@
-client
+User:
+
+Client:
 -bank accounts[bank account]
 -cart[item]
 -purchaseHistory[order]
 
-update user + client
+auth, update user + client (Go over again when we have the relations ready)
 
 BankAccount:
 -Id,
@@ -71,11 +73,6 @@ Sale:
 getList(itemId), insert, update, delete
 
 DeliveryCompany:
--Id,
--Name,
--DeliveryFee: BigDecimal
-
-insert, update, delete, getList()
 
 Order:
 -Id
