@@ -45,6 +45,8 @@ public class DeliveryCompaniesService {
         deliveryCompaniesRepository.deleteDeliveryCompanyById(id);
     }
 
+    /** region converter methods **/
+
     private DeliveryCompany convertDeliveryCompanyEditToDbObj(DeliveryCompanyEdit deliveryCompanyEdit) {
         DeliveryCompany deliveryCompany = new DeliveryCompany();
 

@@ -62,18 +62,21 @@ public class ClientsService {
     }
 
     public boolean updateClient(ClientEdit toEdit) {
-        boolean updated = false;
+        boolean updated;
 
         if (toEdit.getPassword() != null) {
             toEdit.setPassword(BCrypt.hashpw(toEdit.getPassword(), BCrypt.gensalt(12)));
             // Hashes the password, so we do not see it in the Database
-
-            Client client = convertClientEditToDbObj(toEdit);
-
-            clientsRepository.save(client);
-
-            updated = true;
+        } else {
+            toEdit.setPassword(clientsRepository.findClientById(toEdit.getId())
+                    .orElseThrow(() -> new NotFoundException("User " + toEdit.getId() + " not found."))
+                    .getPassword());
         }
+        Client client = convertClientEditToDbObj(toEdit);
+
+        clientsRepository.save(client);
+
+        updated = true;
 
         return updated;
     }

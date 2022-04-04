@@ -1,5 +1,6 @@
 package com.onlinetrademanager.Services;
 
+import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountEdit;
 import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountInsert;
 import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountList;
 import com.onlinetrademanager.Models.BankAccount;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Services are a layer in the MVC design architecture which is used for building this application.
@@ -47,6 +47,24 @@ public class BankAccountsService {
 //                .collect(Collectors.toList());
     }
 
+    public boolean updateBankAccount(BankAccountEdit toEdit) {
+        boolean updated;
+
+        BankAccount bankAccount = convertBankAccountEditToDbObj(toEdit);
+        Client accountOwner = clientsRepository.getById(bankAccountsRepository.getById(toEdit.getId()).getClient().getId());
+
+        bankAccount.setClient(accountOwner);
+
+        bankAccountsRepository.save(bankAccount);
+        updated = true;
+
+        return updated;
+    }
+
+    public void deleteBankAccount(UUID id) {
+        bankAccountsRepository.deleteBankAccountById(id);
+    }
+
     /** region Converter methods **/
 
     private BankAccount convertInsertModelToDbObj(BankAccountInsert bankAccountInsert) {
@@ -74,5 +92,17 @@ public class BankAccountsService {
         bankAccountList.setExpiryDate(bankAccount.getExpiryDate());
 
         return bankAccountList;
+    }
+
+    public BankAccount convertBankAccountEditToDbObj(BankAccountEdit bankAccountEdit) {
+        BankAccount bankAccount = new BankAccount();
+
+        bankAccount.setBankName(bankAccountEdit.getBankName());
+        bankAccount.setCardNumber(bankAccountEdit.getCardNumber());
+        bankAccount.setCVV(bankAccountEdit.getCVV());
+        bankAccount.setExpiryDate(bankAccountEdit.getExpiryDate());
+        bankAccount.setId(bankAccountEdit.getId());
+
+        return bankAccount;
     }
 }

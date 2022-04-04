@@ -56,18 +56,25 @@ public class UsersService {
     }
 
     public boolean updateUser(UserEdit toEdit) {
-        boolean updated = false;
+        boolean updated;
+
+        User user;
 
         if (null != toEdit.getPassword()) {
             toEdit.setPassword(BCrypt.hashpw(toEdit.getPassword(), BCrypt.gensalt(12)));
             // Hashes the password, so we do not see it in the Database
-
-            User user = convertUserEditToDbObj(toEdit);
-
-            usersRepository.save(user);
-
-            updated = true;
         }
+        else {
+            toEdit.setPassword(usersRepository.findUserById(toEdit.getId())
+                    .orElseThrow(() -> new NotFoundException("User " + toEdit.getId() + " not found."))
+                    .getPassword());
+        }
+
+        user = convertUserEditToDbObj(toEdit);
+
+        usersRepository.save(user);
+
+        updated = true;
 
         return updated;
     }
@@ -87,25 +94,6 @@ public class UsersService {
 //
 //        return convertModelToUserList(updatedUser);
 //    }
-
-//    /** region helper methods **/
-//
-//    public User findUserByEmail(String email) throws NotFoundException {
-//        return usersRepository.findUserByEmail(email)
-//                .stream()
-//                .filter(User::isActive)
-//                .findFirst()
-//                .orElseThrow(() -> new NotFoundException("User with email:" + email + " not found (Deleted or does not exist)."));
-//    }
-//
-//    public User authUser(UserAuth userAuth) {
-//        User user = findUserByEmail(userAuth.getEmail());
-//
-//        if (BCrypt.checkpw(userAuth.getPassword(), user.getPassword()) && user.isActive()) {
-//            return user;
-//        }
-//        else return null;
-//    } // !! Moved to BaseUsersService
 
     /** region Converter methods **/
 
