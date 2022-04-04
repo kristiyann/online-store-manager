@@ -17,23 +17,39 @@ If you're having issues turning on your connection, the easiest way to do that i
 
 <h3>API Use:</h3>
 
-Users:
-GET Single User - http://localhost:8080/api/User/?id={userId}
-
-GET User List - http://localhost:8080/api/User/All
-
-GET User Login - http://localhost:8080/api/User/Auth 
+<h5> Base Users (Users + Clients): </h5>
+GET User Login - http://localhost:8080/api/User/Auth <br>
 Required Body: { 
-                 "email": "", 
-                 "password": "" 
+                 "email": "string@string.string", 
+                 "password": "string" 
                }
 
-POST Insert User - http://localhost:8080/api/User
+<h5> Users: </h5>
+GET Single User - http://localhost:8080/api/User?id={userId} <br>
+
+GET User List - http://localhost:8080/api/User/All <br>
+
+POST Insert User - http://localhost:8080/api/User <br>
 Required Body:  {
-                "id": ,
-                "username": ,
-                "email": ,
-                "password": ,
-                "active": ,
-                "role": ("ADMINISTRATOR" or "MODERATOR"),
-                }
+                "username": "string",
+                "email": "string@string.string",
+                "password": "string",
+                "active": true/false,
+                "role": "ADMINISTRATOR"/"MODERATOR"
+                } <br>
+               
+<h5> DeliveryCompanies: </h5>
+GET DeliveryCompanyList - http://localhost:8080/api/DeliveryCompany/All <br>
+
+POST Insert DeliveryCompany - http://localhost:8080/api/DeliveryCompany <br>
+Required Body:  {
+                "name": "string",
+                "deliveryFee": 0.00: 
+                } <br>
+PUT Edit DeliveryCompany - http://localhost:8080/api/DeliveryCompany <br>
+Required Body:  {
+                "id": UUID,
+                "name": "string",
+                "deliveryFee": 0.00
+                } <br>
+DELETE DeliveryCompany - http://localhost:8080/api/DeliveryCompany?id={deliveryCompanyId} <br>
