@@ -1,6 +1,6 @@
 package com.onlinetrademanager.Controllers;
 
-import com.onlinetrademanager.Dtos.DeliveryCompanies.DeliveryCompanyEdit;
+import com.onlinetrademanager.DataTransferObjects.DeliveryCompanies.DeliveryCompanyEdit;
 import com.onlinetrademanager.Models.DeliveryCompany;
 import com.onlinetrademanager.Services.DeliveryCompaniesService;
 import org.springframework.http.HttpStatus;
@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Controllers are the most exposed layer of the MVC architecture which is used when creating this application.
+ * Controllers are the most exposed layer of the MVC architecture which is used for creating this application.
  * With them, we can access data in the database and fetch, add, modify, or delete it.
  * Controllers create addresses which are used by the front-end part of the application.
- * They follow the format: http://localhost:8080/{table name}.
- * Spring applications run on the 8080 port.
+ * These addresses follow the format: http://localhost:8080/api/{table name}.
+ * Spring applications run on the 8080 port by default.
  * Controllers' addresses redirect and trigger methods from the Service layer
- * We can pass parameters in two ways:
+ * We can pass parameters in a couple ways:
  * @PathVariable - requires the parameters to be set in the address string
  * @RequestBody - requires the parameters to be set in the JSON body
  * The current controller is used for operations on Delivery Companies.

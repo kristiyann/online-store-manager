@@ -1,4 +1,4 @@
-package com.onlinetrademanager.Dtos.DeliveryCompanies;
+package com.onlinetrademanager.DataTransferObjects.DeliveryCompanies;
 
 import java.math.BigDecimal;
 import java.util.UUID;
