@@ -11,4 +11,6 @@ public interface BankAccountsRepository extends JpaRepository<BankAccount, UUID>
     // List<BankAccount> findAllByClients(UUID clientId);
 
     List<BankAccount> findAllBankAccountsByClient(Client client);
+
+    void deleteBankAccountById(UUID id);
 }

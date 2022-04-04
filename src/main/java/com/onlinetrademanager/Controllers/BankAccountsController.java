@@ -1,7 +1,7 @@
 package com.onlinetrademanager.Controllers;
 
+import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountEdit;
 import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountInsert;
-import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountList;
 import com.onlinetrademanager.Models.BankAccount;
 import com.onlinetrademanager.Services.BankAccountsService;
 import org.springframework.http.HttpStatus;
@@ -43,5 +43,20 @@ public class BankAccountsController {
     public ResponseEntity<List<BankAccount>> getBankAccountList(@RequestParam UUID clientId) {
         List<BankAccount> bankAccounts = bankAccountsService.findAllByClient(clientId);
         return new ResponseEntity<>(bankAccounts, HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<Boolean> updateBankAccount(@RequestBody BankAccountEdit bankAccount) {
+        boolean updated = bankAccountsService.updateBankAccount(bankAccount);
+        if (updated) {
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        }
+        else return new ResponseEntity<>(updated, HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteBankAccount(@RequestParam UUID id) {
+        bankAccountsService.deleteBankAccount(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
