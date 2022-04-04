@@ -17,7 +17,7 @@ If you're having issues turning on your connection, the easiest way to do that i
 
 <h3>API Use:</h3>
 
-Base Users (Users + Clients):
+<h5> Base Users (Users + Clients): </h5>
 GET User Login - http://localhost:8080/api/User/Auth <br>
 Required Body: { 
                  "email": "", 
@@ -35,7 +35,7 @@ Required Body:  {
                 "email": ,
                 "password": ,
                 "active": ,
-                "role": ("ADMINISTRATOR" or "MODERATOR"),
+                "role": ("ADMINISTRATOR" or "MODERATOR")
                 }
                
 <h5> DeliveryCompanies: </h5>
@@ -44,5 +44,5 @@ GET DeliveryCompanyList - http://localhost:8080/api/DeliveryCompany/All <br>
 POST Insert DeliveryCompany - http://localhost:8080/api/DeliveryCompany <br>
 Required Body:  {
                 "name": ,
-                "deliveryFee": ,
+                "deliveryFee": 
                 }
