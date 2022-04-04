@@ -24,7 +24,7 @@ Required Body: {
                  "password": "" 
                }
 
-Users:
+<h5> Users: </h5>
 GET Single User - http://localhost:8080/api/User?id={userId} <br>
 
 GET User List - http://localhost:8080/api/User/All <br>
@@ -38,7 +38,7 @@ Required Body:  {
                 "role": ("ADMINISTRATOR" or "MODERATOR"),
                 }
                
-DeliveryCompanies:
+<h5> DeliveryCompanies: </h5>
 GET DeliveryCompanyList - http://localhost:8080/api/DeliveryCompany/All <br>
 
 POST Insert DeliveryCompany - http://localhost:8080/api/DeliveryCompany <br>
