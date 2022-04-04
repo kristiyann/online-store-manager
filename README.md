@@ -17,18 +17,19 @@ If you're having issues turning on your connection, the easiest way to do that i
 
 <h3>API Use:</h3>
 
-Users:
-GET Single User - http://localhost:8080/api/User/?id={userId}
-
-GET User List - http://localhost:8080/api/User/All
-
-GET User Login - http://localhost:8080/api/User/Auth 
+Base Users (Users + Clients):
+GET User Login - http://localhost:8080/api/User/Auth <br>
 Required Body: { 
                  "email": "", 
                  "password": "" 
                }
 
-POST Insert User - http://localhost:8080/api/User
+Users:
+GET Single User - http://localhost:8080/api/User?id={userId} <br>
+
+GET User List - http://localhost:8080/api/User/All <br>
+
+POST Insert User - http://localhost:8080/api/User <br>
 Required Body:  {
                 "id": ,
                 "username": ,
