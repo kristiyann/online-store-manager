@@ -31,10 +31,18 @@ GET User List - http://localhost:8080/api/User/All <br>
 
 POST Insert User - http://localhost:8080/api/User <br>
 Required Body:  {
-                "id": ,
                 "username": ,
                 "email": ,
                 "password": ,
                 "active": ,
                 "role": ("ADMINISTRATOR" or "MODERATOR"),
+                }
+               
+DeliveryCompanies:
+GET DeliveryCompanyList - http://localhost:8080/api/DeliveryCompany/All <br>
+
+POST Insert DeliveryCompany - http://localhost:8080/api/DeliveryCompany <br>
+Required Body:  {
+                "name": ,
+                "deliveryFee": ,
                 }
