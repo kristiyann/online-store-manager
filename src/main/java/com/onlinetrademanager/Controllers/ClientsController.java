@@ -46,7 +46,7 @@ public class ClientsController {
     }
 
     @PutMapping
-    public ResponseEntity<Boolean> updateClient(ClientEdit client) {
+    public ResponseEntity<Boolean> updateClient(@RequestBody ClientEdit client) {
         boolean updated = clientsService.updateClient(client);
         if (updated) {
             return new ResponseEntity<>(updated, HttpStatus.OK);

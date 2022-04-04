@@ -69,7 +69,7 @@ public class UsersController {
     }
 
     @PutMapping
-    public ResponseEntity<Boolean> updateUser(UserEdit user) {
+    public ResponseEntity<Boolean> updateUser(@RequestBody UserEdit user) {
         boolean updated = usersService.updateUser(user);
         if (updated) {
             return new ResponseEntity<>(updated, HttpStatus.OK);

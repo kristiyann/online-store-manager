@@ -58,7 +58,7 @@ public class UsersService {
     public boolean updateUser(UserEdit toEdit) {
         boolean updated = false;
 
-        if (toEdit.getPassword() != null) {
+        if (null != toEdit.getPassword()) {
             toEdit.setPassword(BCrypt.hashpw(toEdit.getPassword(), BCrypt.gensalt(12)));
             // Hashes the password, so we do not see it in the Database
 
@@ -121,18 +121,6 @@ public class UsersService {
 
         return userList;
     }
-
-//    private User convertUserListToModel(UserList model) {
-//        User user = new User();
-//
-//        user.setId(model.getId());
-//        user.setUsername(model.getUsername());
-//        user.setEmail(model.getEmail());
-//        user.setActive(model.isActive());
-//        user.setRole(model.getRole());
-//
-//        return user;
-//    }
 
     private User convertUserEditToDbObj(UserEdit model) {
         User user = new User();

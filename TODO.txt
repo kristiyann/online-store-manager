@@ -5,15 +5,11 @@ Client:
 -cart[item]
 -purchaseHistory[order]
 
-auth, update user + client (Go over again when we have the relations ready)
+update user + client (Go over again when we have the relations ready) +Update with BankAcc works
 
 BankAccount:
--Id,
--BankName: string
--Number: string
--User
 
-insert, getList(userId), delete, update (only client)
+delete, update (only client)
 
 Store:
 -Id

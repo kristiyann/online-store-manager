@@ -2,10 +2,8 @@ package com.onlinetrademanager.Controllers;
 
 import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountInsert;
 import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountList;
-import com.onlinetrademanager.DataTransferObjects.Clients.ClientList;
-import com.onlinetrademanager.Models.Users.Client;
+import com.onlinetrademanager.Models.BankAccount;
 import com.onlinetrademanager.Services.BankAccountsService;
-import com.onlinetrademanager.Services.ClientsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +39,9 @@ public class BankAccountsController {
         return new ResponseEntity<>(bankAccountId, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<BankAccountList>> getBankAccountList(@RequestParam UUID clientId) {
-        List<BankAccountList> bankAccounts = bankAccountsService.findAllBankAccountsByClient(clientId);
+    @GetMapping()
+    public ResponseEntity<List<BankAccount>> getBankAccountList(@RequestParam UUID clientId) {
+        List<BankAccount> bankAccounts = bankAccountsService.findAllByClient(clientId);
         return new ResponseEntity<>(bankAccounts, HttpStatus.OK);
     }
 }

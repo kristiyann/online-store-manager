@@ -1,16 +1,15 @@
 package com.onlinetrademanager.Models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onlinetrademanager.Models.Users.Client;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.CreditCardNumber;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -24,19 +23,22 @@ public class BankAccount implements Serializable {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
+    @NotNull
     private String bankName;
 
     @CreditCardNumber
     private String cardNumber;
 
-    @Size(min=3, max=3)
+    @Column(length = 3)
     private String CVV;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate expiryDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne
+    @JsonIgnore
     private Client client;
 
     public BankAccount() {

@@ -89,12 +89,12 @@ public class ClientsService {
         clientList.setUsername(client.getUsername());
         //clientList.getBankAccounts().addAll(client.getBankAccounts());
 
-        if (client.getBankAccounts() != null) {
-            for (BankAccount bankAccount : client.getBankAccounts()) {
-                BankAccountList bankAccountList = bankAccountsService.convertDbObjToBankAccountList(bankAccount);
-                clientList.addBankAccount(bankAccountList);
-            }
-        }
+//        if (client.getBankAccounts() != null && !client.getBankAccounts().isEmpty()) {
+//            for (BankAccount bankAccount : client.getBankAccounts()) {
+//                BankAccountList bankAccountList = bankAccountsService.convertDbObjToBankAccountList(bankAccount);
+//                clientList.addBankAccount(bankAccountList);
+//            }
+//        }
 
         return clientList;
     }
@@ -107,6 +107,10 @@ public class ClientsService {
         client.setEmail(model.getEmail());
         client.setActive(model.isActive());
         client.setPassword(model.getPassword());
+
+        client.getBankAccounts().addAll(clientsRepository.findClientById(model.getId())
+                .orElseThrow(() -> new NotFoundException("User " + model.getId() + " not found."))
+                .getBankAccounts());
 
         return client;
     }

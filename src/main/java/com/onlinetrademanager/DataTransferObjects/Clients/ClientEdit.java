@@ -14,7 +14,7 @@ public class ClientEdit implements Serializable {
     @NotNull
     @Email
     private String email;
-    @NotNull
+
     private String password;
     @NotNull
     private boolean active = true;

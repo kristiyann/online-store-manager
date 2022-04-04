@@ -2,7 +2,6 @@ package com.onlinetrademanager.Services;
 
 import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountInsert;
 import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountList;
-import com.onlinetrademanager.DataTransferObjects.Clients.ClientList;
 import com.onlinetrademanager.Models.BankAccount;
 import com.onlinetrademanager.Models.Users.Client;
 import com.onlinetrademanager.Repositories.BankAccountsRepository;
@@ -39,11 +38,13 @@ public class BankAccountsService {
         return bankAccount.getId();
     }
 
-    public List<BankAccountList> findAllBankAccountsByClient(UUID clientId) {
-        return bankAccountsRepository.findAllByClient(clientId)
-                .stream()
-                .map(this::convertDbObjToBankAccountList)
-                .collect(Collectors.toList());
+    public List<BankAccount> findAllByClient(UUID clientId) {
+        Client client = clientsRepository.getById(clientId);
+
+        return bankAccountsRepository.findAllBankAccountsByClient(client);
+//                .stream()
+//                .map(this::convertDbObjToBankAccountList)
+//                .collect(Collectors.toList());
     }
 
     /** region Converter methods **/

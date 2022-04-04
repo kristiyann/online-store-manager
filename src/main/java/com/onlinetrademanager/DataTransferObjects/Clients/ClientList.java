@@ -15,7 +15,7 @@ public class ClientList implements Serializable {
     private String email;
     // private boolean active;
     private String dtype;
-    private Set<BankAccountList> bankAccounts = new HashSet<>();
+    //private Set<BankAccountList> bankAccounts = new HashSet<>();
     // private HashSet<Item> cart;
     // private HashSet<Order> purchaseHistory;
 
@@ -62,11 +62,11 @@ public class ClientList implements Serializable {
         this.dtype = dtype;
     }
 
-    public void addBankAccount(BankAccountList bankAccount) {
-        bankAccounts.add(bankAccount);
-    }
-
-    public Set<BankAccountList> getBankAccounts() {
-        return bankAccounts;
-    }
+//    public void addBankAccount(BankAccountList bankAccount) {
+//        bankAccounts.add(bankAccount);
+//    }
+//
+//    public Set<BankAccountList> getBankAccounts() {
+//        return bankAccounts;
+//    }
 }
