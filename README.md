@@ -37,6 +37,59 @@ Required Body:  {
                 "active": true/false,
                 "role": "ADMINISTRATOR"/"MODERATOR"
                 } <br>
+                
+PUT Edit User - http://localhost:8080/api/User <br>
+Required Body: {
+                  "id": UUID,
+                  "username": "string",
+                  "email": "string@string.string",
+                  "password": "string",
+                  "active": true/false,
+                  "role": "ADMINISTRATOR"/"MODERATOR"
+               }
+                
+<h5> Clients: </h5>
+GET Client List - http://localhost:8080/api/Client/All <br>
+
+POST Insert Client - http://localhost:8080/api/Client <br>
+Required Body:  {
+                  "username": "string",
+                  "email": "string@string.string",
+                  "password": "string",
+                  "active": true/false,
+                } <br>
+PUT Edit Client - http://localhost:8080/api/Client <br>
+Required Body:  {
+                  "id": UUID,
+                  "username": "string",
+                  "email": "string@string.string",
+                  "password": "string",
+                  "active": true/false,
+                }
+                
+<h5> Bank Accounts: </h5>
+
+POST Insert - http://localhost:8080/api/BankAccount <br>
+Required Body: {
+                  "bankName": "string",
+                  "cardNumber": "0000000000000000" (16 digits),
+                  "cvv": "000" (3 digits),
+                  "expiryDate": "YYYY-MM-DD",
+                  "clientId": UUID
+               }
+               
+GET BankAccountList by Client - http://localhost:8080/api/BankAccount?clientId={clientId} <br>
+
+PUT BankAccount - http://localhost:8080/api/BankAccount <br>
+Required Body: {
+                  "id": UUID,
+                  "bankName": "string",
+                  "cardNumber": "0000000000000000" (16 digits),
+                  "cvv": "000" (3 digits),
+                  "expiryDate": "YYYY-MM-DD",
+               }
+
+DELETE BankAccount - http://localhost:8080/api/BankAccount?id={id} <br>
                
 <h5> DeliveryCompanies: </h5>
 GET DeliveryCompanyList - http://localhost:8080/api/DeliveryCompany/All <br>
