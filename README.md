@@ -43,7 +43,7 @@ Required Body: {
                   "id": UUID,
                   "username": "string",
                   "email": "string@string.string",
-                  "password": "string",
+                  "password": "string", (can be null)
                   "active": true/false,
                   "role": "ADMINISTRATOR"/"MODERATOR"
                }
@@ -63,7 +63,7 @@ Required Body:  {
                   "id": UUID,
                   "username": "string",
                   "email": "string@string.string",
-                  "password": "string",
+                  "password": "string", (can be null)
                   "active": true/false,
                 }
                 
