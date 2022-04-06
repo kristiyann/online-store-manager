@@ -17,17 +17,17 @@ If you're having issues turning on your connection, the easiest way to do that i
 
 <h3>API Use:</h3>
 
-<h5> Base Users (Users + Clients): </h5>
+<h5> Base Users (Users + Clients): </h5> <br>
 GET User Login - http://localhost:8080/api/User/Auth <br>
 Required Body: { 
                  "email": "string@string.string", 
                  "password": "string" 
-               }
+               } <br>
 
 <h5> Users: </h5>
-GET Single User - http://localhost:8080/api/User?id={userId} <br>
+GET Single User - http://localhost:8080/api/User?id={userId} <br> <br>
 
-GET User List - http://localhost:8080/api/User/All <br>
+GET User List - http://localhost:8080/api/User/All <br> <br>
 
 POST Insert User - http://localhost:8080/api/User <br>
 Required Body:  {
@@ -46,10 +46,10 @@ Required Body: {
                   "password": "string", (can be null)
                   "active": true/false,
                   "role": "ADMINISTRATOR"/"MODERATOR"
-               }
+               } <br>
                 
-<h5> Clients: </h5>
-GET Client List - http://localhost:8080/api/Client/All <br>
+<h5> Clients: </h5> <br>
+GET Client List - http://localhost:8080/api/Client/All <br> <br>
 
 POST Insert Client - http://localhost:8080/api/Client <br>
 Required Body:  {
@@ -65,7 +65,7 @@ Required Body:  {
                   "email": "string@string.string",
                   "password": "string", (can be null)
                   "active": true/false,
-                }
+                } <br>
                 
 <h5> Bank Accounts: </h5>
 
@@ -76,9 +76,9 @@ Required Body: {
                   "cvv": "000" (3 digits),
                   "expiryDate": "YYYY-MM-DD",
                   "clientId": UUID
-               }
+               } <br>
                
-GET BankAccountList by Client - http://localhost:8080/api/BankAccount?clientId={clientId} <br>
+GET BankAccountList by Client - http://localhost:8080/api/BankAccount?clientId={clientId} <br> <br>
 
 PUT BankAccount - http://localhost:8080/api/BankAccount <br>
 Required Body: {
@@ -87,12 +87,12 @@ Required Body: {
                   "cardNumber": "0000000000000000" (16 digits),
                   "cvv": "000" (3 digits),
                   "expiryDate": "YYYY-MM-DD",
-               }
+               } <br>
 
-DELETE BankAccount - http://localhost:8080/api/BankAccount?id={id} <br>
+DELETE BankAccount - http://localhost:8080/api/BankAccount?id={id} <br> <br>
                
-<h5> DeliveryCompanies: </h5>
-GET DeliveryCompanyList - http://localhost:8080/api/DeliveryCompany/All <br>
+<h5> DeliveryCompanies: </h5> <br>
+GET DeliveryCompanyList - http://localhost:8080/api/DeliveryCompany/All <br> <br>
 
 POST Insert DeliveryCompany - http://localhost:8080/api/DeliveryCompany <br>
 Required Body:  {
@@ -105,4 +105,4 @@ Required Body:  {
                 "name": "string",
                 "deliveryFee": 0.00
                 } <br>
-DELETE DeliveryCompany - http://localhost:8080/api/DeliveryCompany?id={deliveryCompanyId} <br>
+DELETE DeliveryCompany - http://localhost:8080/api/DeliveryCompany?id={deliveryCompanyId} <br> <br>
