@@ -1,7 +1,7 @@
 package com.onlinetrademanager.Services;
 
 
-import com.onlinetrademanager.DataTransferObjects.DeliveryCompanies.DeliveryCompanyEdit;
+import com.onlinetrademanager.Dtos.DeliveryCompanies.DeliveryCompanyEdit;
 import com.onlinetrademanager.Models.DeliveryCompany;
 import com.onlinetrademanager.Repositories.DeliveryCompaniesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class DeliveryCompaniesService {
     }
 
     public DeliveryCompany updateDeliveryCompany(DeliveryCompanyEdit deliveryCompanyEdit) {
-        DeliveryCompany deliveryCompany = convertDeliveryCompanyEditToDbObj(deliveryCompanyEdit);
+        DeliveryCompany deliveryCompany = convertDeliveryCompanyEditToModel(deliveryCompanyEdit);
         deliveryCompaniesRepository.save(deliveryCompany);
         return deliveryCompany;
     }
@@ -45,9 +45,7 @@ public class DeliveryCompaniesService {
         deliveryCompaniesRepository.deleteDeliveryCompanyById(id);
     }
 
-    /** region converter methods **/
-
-    private DeliveryCompany convertDeliveryCompanyEditToDbObj(DeliveryCompanyEdit deliveryCompanyEdit) {
+    private DeliveryCompany convertDeliveryCompanyEditToModel(DeliveryCompanyEdit deliveryCompanyEdit) {
         DeliveryCompany deliveryCompany = new DeliveryCompany();
 
         deliveryCompany.setId(deliveryCompanyEdit.getId());
