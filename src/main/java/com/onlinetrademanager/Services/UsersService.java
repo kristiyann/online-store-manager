@@ -4,7 +4,7 @@ import com.onlinetrademanager.Dtos.Users.UserAuth;
 import com.onlinetrademanager.Dtos.Users.UserList;
 import com.onlinetrademanager.Dtos.Users.UserPasswordEdit;
 import com.onlinetrademanager.Exceptions.NotFoundException;
-import com.onlinetrademanager.Models.User;
+import com.onlinetrademanager.Models.Users.User;
 import com.onlinetrademanager.Repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;

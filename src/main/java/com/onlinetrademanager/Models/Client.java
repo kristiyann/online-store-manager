@@ -1,6 +1,7 @@
 package com.onlinetrademanager.Models;
 
 import com.onlinetrademanager.Enums.Users.UserRole;
+import com.onlinetrademanager.Models.Users.User;
 
 import java.io.Serializable;
 import java.util.UUID;

@@ -2,8 +2,7 @@ package com.onlinetrademanager.Controllers;
 
 import com.onlinetrademanager.Dtos.Users.UserAuth;
 import com.onlinetrademanager.Dtos.Users.UserList;
-import com.onlinetrademanager.Dtos.Users.UserPasswordEdit;
-import com.onlinetrademanager.Models.User;
+import com.onlinetrademanager.Models.Users.User;
 import com.onlinetrademanager.Services.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,13 +1,11 @@
 package com.onlinetrademanager.Services;
 
-import com.onlinetrademanager.Exceptions.ItemNotFoundException;
 import com.onlinetrademanager.Exceptions.OrderNotFoundException;
 import com.onlinetrademanager.Models.Order;
 import com.onlinetrademanager.Models.Store;
-import com.onlinetrademanager.Models.User;
+import com.onlinetrademanager.Models.Users.User;
 import com.onlinetrademanager.Repositories.OrderRepository;
 import com.onlinetrademanager.Repositories.UsersRepository;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

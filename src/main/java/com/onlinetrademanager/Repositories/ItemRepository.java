@@ -1,9 +1,7 @@
 package com.onlinetrademanager.Repositories;
 
-import com.onlinetrademanager.Models.Image;
 import com.onlinetrademanager.Models.Item;
 import com.onlinetrademanager.Models.Store;
-import com.onlinetrademanager.Models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

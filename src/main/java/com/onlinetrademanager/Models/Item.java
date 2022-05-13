@@ -57,7 +57,7 @@ public class Item implements Serializable {
 
     // one to one
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Store store;
 
     // Relations

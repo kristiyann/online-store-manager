@@ -4,6 +4,7 @@ package com.onlinetrademanager.Models;
 import com.fasterxml.jackson.annotation.*;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
 import com.onlinetrademanager.Enums.order.OrderStatus;
+import com.onlinetrademanager.Models.Users.User;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
