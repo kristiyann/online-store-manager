@@ -1,6 +1,5 @@
 package com.onlinetrademanager.Models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onlinetrademanager.Models.Users.Client;
 import org.hibernate.annotations.GenericGenerator;
@@ -32,8 +31,7 @@ public class BankAccount implements Serializable {
     @Column(length = 3)
     private String CVV;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat
     private LocalDate expiryDate;
 
     @NotNull

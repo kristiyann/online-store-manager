@@ -76,10 +76,4 @@ public class UsersController {
         }
         else return new ResponseEntity<>(updated, HttpStatus.BAD_REQUEST);
     }
-
-//    @PutMapping("/UpdatePassword")
-//    public ResponseEntity<UserList> updateUserPassword(@RequestBody UserPasswordEdit user) {
-//        UserList updatedUser = usersService.updateUserPassword(user);
-//        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-//    } // We do not need this, so we wait a bit and delete it after some time
 }

@@ -79,22 +79,6 @@ public class UsersService {
         return updated;
     }
 
-//    public UserList updateUserPassword(UserPasswordEdit model) {
-//        User updatedUser = usersRepository.findUserById(model.getId())
-//                .stream()
-//                .filter(User::isActive)
-//                .findFirst()
-//                .orElseThrow(() -> new NotFoundException("User " + model.getId() + " not found."));
-//
-//        if (model.getPassword() != null) {
-//            updatedUser.setPassword(BCrypt.hashpw(model.getPassword(), BCrypt.gensalt(12)));
-//            // Hashes the password, so we do not see it in the Database
-//            usersRepository.save(updatedUser);
-//        }
-//
-//        return convertModelToUserList(updatedUser);
-//    }
-
     /** region Converter methods **/
 
     private UserList convertDbObjToUserList(User user) {

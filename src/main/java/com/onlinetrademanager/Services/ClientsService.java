@@ -1,13 +1,9 @@
 package com.onlinetrademanager.Services;
 
-import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountList;
 import com.onlinetrademanager.DataTransferObjects.Clients.ClientEdit;
 import com.onlinetrademanager.DataTransferObjects.Clients.ClientList;
-import com.onlinetrademanager.DataTransferObjects.Users.UserEdit;
 import com.onlinetrademanager.Exceptions.NotFoundException;
-import com.onlinetrademanager.Models.BankAccount;
 import com.onlinetrademanager.Models.Users.Client;
-import com.onlinetrademanager.Models.Users.User;
 import com.onlinetrademanager.Repositories.ClientsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;

@@ -1,15 +1,9 @@
 User:
-
 Client:
--bank accounts[bank account]
 -cart[item]
 -purchaseHistory[order]
 
 update user + client (Go over again when we have the relations ready) +Update with BankAcc works
-
-BankAccount:
-
-delete, update (only client)
 
 Store:
 -Id
@@ -67,8 +61,6 @@ Sale:
 -Item: Item
 
 getList(itemId), insert, update, delete
-
-DeliveryCompany:
 
 Order:
 -Id
