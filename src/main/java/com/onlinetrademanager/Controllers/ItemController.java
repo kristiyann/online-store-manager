@@ -23,8 +23,8 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Item> getItem(UUID id) {
+    @GetMapping
+    public ResponseEntity<Item> getItem(@RequestParam UUID id) {
         Item item = itemService.findItemById(id);
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
@@ -35,9 +35,9 @@ public class ItemController {
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
-    @GetMapping("/All_By_Store")
-    public ResponseEntity<List<Item>> getAllItemsByStore(UUID id) {
-        List<Item> items = itemService.findAllItemsByStore(id);
+    @GetMapping("/Store")
+    public ResponseEntity<List<Item>> getAllItemsByStore(@RequestParam UUID storeId) {
+        List<Item> items = itemService.findAllItemsByStore(storeId);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 

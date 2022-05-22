@@ -2,7 +2,6 @@ package com.onlinetrademanager.Controllers;
 
 
 import com.onlinetrademanager.Models.Image;
-import com.onlinetrademanager.Models.Item;
 import com.onlinetrademanager.Services.ImageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +20,8 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Image> getImage(UUID id) {
+    @GetMapping
+    public ResponseEntity<Image> getById(@RequestParam UUID id) {
         Image image = imageService.findImageById(id);
         return new ResponseEntity<>(image, HttpStatus.OK);
     }
@@ -33,14 +32,14 @@ public class ImageController {
         return new ResponseEntity<>(examinations, HttpStatus.OK);
     }
 
-    @GetMapping("/All_By_Item")
-    public ResponseEntity<List<Image>> getAllImagesByItem(@RequestParam UUID id) {
-        List<Image> examinations = imageService.findAllImagesByItem(id);
+    @GetMapping("/Item")
+    public ResponseEntity<List<Image>> getAllImagesByItem(@RequestParam UUID itemId) {
+        List<Image> examinations = imageService.findAllImagesByItem(itemId);
         return new ResponseEntity<>(examinations, HttpStatus.OK);
     }
 
     @PostMapping()
-    public ResponseEntity<Image> addExamination(@RequestBody Image image) {
+    public ResponseEntity<Image> insertImage(@RequestBody Image image) {
         Image newImage = null;
         try {
             newImage = imageService.insertImage(image);
@@ -52,7 +51,7 @@ public class ImageController {
     }
 
     @PutMapping()
-    public ResponseEntity<Image> updateExamination(@RequestBody Image image) {
+    public ResponseEntity<Image> updateImage(@RequestBody Image image) {
         Image updateImage = null;
         try {
             updateImage = imageService.updateImage(image);

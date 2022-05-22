@@ -4,7 +4,7 @@ import com.onlinetrademanager.Exceptions.ItemNotFoundException;
 import com.onlinetrademanager.Models.Item;
 import com.onlinetrademanager.Models.Store;
 import com.onlinetrademanager.Repositories.ItemRepository;
-import com.onlinetrademanager.Repositories.StoreRepository;
+import com.onlinetrademanager.Repositories.StoresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +17,12 @@ import java.util.UUID;
 public class ItemService {
 
     public final ItemRepository itemRepository;
-    public final StoreRepository storeRepository;
+    public final StoresRepository storesRepository;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository, StoreRepository storeRepository){
+    public ItemService(ItemRepository itemRepository, StoresRepository storesRepository){
         this.itemRepository = itemRepository;
-        this.storeRepository = storeRepository;
+        this.storesRepository = storesRepository;
     }
 
     public Item insertItem(Item item){
@@ -53,10 +53,10 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public List<Item> findAllItemsByStore(UUID id){
+    public List<Item> findAllItemsByStore(UUID storeId){
 
-        Store store = storeRepository.findStoreById(id).orElseThrow(()
-                -> new ItemNotFoundException("Store " + id + "not found!"));
+        Store store = storesRepository.findStoreById(storeId).orElseThrow(()
+                -> new ItemNotFoundException("Store " + storeId + "not found!"));
         return itemRepository.findAllImagesByStore(store);
     }
 

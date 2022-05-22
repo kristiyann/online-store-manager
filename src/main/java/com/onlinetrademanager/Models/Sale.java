@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -31,64 +33,58 @@ public class Sale implements Serializable {
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate saleStartDate;
+    private LocalDate startDate;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate saleEndDate;
+    private LocalDate endDate;
 
     @NotNull
     private BigDecimal salePercentage;
 
     // Relations
 
-    @NotNull
-    @OneToOne
-    @JoinColumn(name = "item_id", nullable = false)
-    private Item item;
+    // @NotNull
+    @OneToMany
+    @JoinColumn(name = "sale", nullable = false)
+    private Set<Item> items = new HashSet<>();
 
     public Sale() {
     }
 
     public Sale(Sale sale){
-        setSaleStartDate(sale.getSaleStartDate());
-        setSaleEndDate(sale.getSaleEndDate());
-        setItem(sale.getItem());
+        setStartDate(sale.getStartDate());
+        setEndDate(sale.getEndDate());
     }
 
-    public Sale(LocalDate saleStartDate, LocalDate saleEndDate, BigDecimal salePercentage){
-        setSaleStartDate(saleStartDate);
-        setSaleEndDate(saleEndDate);
+    public Sale(LocalDate startDate, LocalDate saleEndDate, BigDecimal salePercentage){
+        setStartDate(startDate);
+        setEndDate(saleEndDate);
         setSalePercentage(salePercentage);
-        item = new Item();
     }
 
     public UUID getId() {
         return id;
     }
 
-    public LocalDate getSaleStartDate() {
-        return saleStartDate;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setSaleStartDate(LocalDate saleStartDate) {
-        this.saleStartDate = saleStartDate;
+    public Set<Item> getItems() {
+        return items;
     }
 
-    public LocalDate getSaleEndDate() {
-        return saleEndDate;
+    public void setStartDate(LocalDate saleStartDate) {
+        this.startDate = saleStartDate;
     }
 
-    public void setSaleEndDate(LocalDate saleEndDate) {
-        this.saleEndDate = saleEndDate;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
+    public void setEndDate(LocalDate saleEndDate) {
+        this.endDate = saleEndDate;
     }
 
     public BigDecimal getSalePercentage() {
@@ -97,5 +93,9 @@ public class Sale implements Serializable {
 
     public void setSalePercentage(BigDecimal salePercentage) {
         this.salePercentage = salePercentage;
+    }
+
+    public void setItems(HashSet<Item> items) {
+        this.items = items;
     }
 }

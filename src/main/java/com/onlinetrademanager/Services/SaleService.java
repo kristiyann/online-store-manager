@@ -49,11 +49,11 @@ public class SaleService {
         );
     }
 
-    public Sale findSaleByItem(Item item){
-        return saleRepository.findSaleByItem(item).orElseThrow(
-                () -> new SaleNotFoundException("Item " + item.getId() + "does not have Sale object attached!")
-        );
-    }
+//    public Sale findSaleByItem(Item item){
+//        return saleRepository.findSaleByItem(item).orElseThrow(
+//                () -> new SaleNotFoundException("Item " + item.getId() + "does not have Sale object attached!")
+//        );
+//    }
 
     public List<Sale> findAllSales(){
         return saleRepository.findAll();

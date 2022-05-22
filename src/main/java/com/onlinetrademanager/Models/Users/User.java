@@ -1,6 +1,7 @@
 package com.onlinetrademanager.Models.Users;
 
 import com.onlinetrademanager.Enums.Users.UserRole;
+import com.onlinetrademanager.Models.Store;
 import jdk.jfr.BooleanFlag;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -10,6 +11,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +21,9 @@ public class User extends BaseUser implements Serializable {
     @NotNull
     @Enumerated
     private UserRole role;
+
+    @OneToMany
+    private Set<Store> stores = new HashSet<>();
 
     public User() { }
 
@@ -32,6 +38,14 @@ public class User extends BaseUser implements Serializable {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public Set<Store> getStores() {
+        return stores;
+    }
+
+    public void setStores(Set<Store> stores) {
+        this.stores = stores;
     }
 
     @Override

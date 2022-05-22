@@ -22,8 +22,8 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrder(UUID id) {
+    @GetMapping
+    public ResponseEntity<Order> getOrder(@RequestParam  UUID id) {
         Order order = orderService.findOrderById(id);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
@@ -34,21 +34,21 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    @GetMapping("/All_By_DeliveryCompany")
-    public ResponseEntity<List<Order>> getAllOrdersByDeliveryCompanyId(UUID delCompId) {
+    @GetMapping("/DeliveryCompany")
+    public ResponseEntity<List<Order>> getAllOrdersByDeliveryCompanyId(@RequestParam UUID delCompId) {
         List<Order> orders = orderService.findAllOrdersByDeliveryCompanyId(delCompId);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    @GetMapping("/All_By_Store")
-    public ResponseEntity<List<Order>> getAllOrdersByStoreId(UUID storeId) {
+    @GetMapping("/Store")
+    public ResponseEntity<List<Order>> getAllOrdersByStoreId(@RequestParam UUID storeId) {
         List<Order> orders = orderService.findAllOrdersByStoreId(storeId);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    @GetMapping("/All_By_User")
-    public ResponseEntity<List<Order>> getAllOrdersByUser(UUID id) {
-        List<Order> orders = orderService.findAllOrdersByUserId(id);
+    @GetMapping("/User")
+    public ResponseEntity<List<Order>> getAllOrdersByUser(UUID userId) {
+        List<Order> orders = orderService.findAllOrdersByUserId(userId);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 

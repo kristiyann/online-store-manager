@@ -7,7 +7,7 @@ import com.onlinetrademanager.Models.Store;
 import com.onlinetrademanager.Models.Users.User;
 import com.onlinetrademanager.Repositories.DeliveryCompaniesRepository;
 import com.onlinetrademanager.Repositories.OrderRepository;
-import com.onlinetrademanager.Repositories.StoreRepository;
+import com.onlinetrademanager.Repositories.StoresRepository;
 import com.onlinetrademanager.Repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,14 +22,14 @@ public class OrderService {
 
     public final OrderRepository orderRepository;
     public final DeliveryCompaniesRepository deliveryCompaniesRepository;
-    public final StoreRepository storeRepository;
+    public final StoresRepository storesRepository;
     public final UsersRepository usersRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, DeliveryCompaniesRepository deliveryCompaniesRepository, StoreRepository storeRepository, UsersRepository usersRepository){
+    public OrderService(OrderRepository orderRepository, DeliveryCompaniesRepository deliveryCompaniesRepository, StoresRepository storesRepository, UsersRepository usersRepository){
         this.orderRepository = orderRepository;
         this.deliveryCompaniesRepository = deliveryCompaniesRepository;
-        this.storeRepository = storeRepository;
+        this.storesRepository = storesRepository;
         this.usersRepository = usersRepository;
     }
 
@@ -69,7 +69,7 @@ public class OrderService {
     public List<Order> findAllOrders(){ return orderRepository.findAll(); }
 
     public List<Order> findAllOrdersByStoreId(UUID storeId){
-        Store store = storeRepository.findStoreById(storeId).orElseThrow(()
+        Store store = storesRepository.findStoreById(storeId).orElseThrow(()
                 -> new OrderNotFoundException("Store " + storeId + "not found!"));
         return orderRepository.findAllOrdersByStore(store);
     }

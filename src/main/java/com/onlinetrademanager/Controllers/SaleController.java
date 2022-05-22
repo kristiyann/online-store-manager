@@ -23,8 +23,8 @@ public class SaleController {
         this.saleService = saleService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Sale> getSale(UUID id) {
+    @GetMapping
+    public ResponseEntity<Sale> getSale(@RequestParam UUID id) {
         Sale sale = saleService.findSaleById(id);
         return new ResponseEntity<>(sale, HttpStatus.OK);
     }
