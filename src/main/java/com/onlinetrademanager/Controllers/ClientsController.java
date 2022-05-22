@@ -49,8 +49,8 @@ public class ClientsController {
     public ResponseEntity<Boolean> updateClient(@RequestBody ClientEdit client) {
         boolean updated = clientsService.updateClient(client);
         if (updated) {
-            return new ResponseEntity<>(updated, HttpStatus.OK);
+            return new ResponseEntity<>(true, HttpStatus.OK);
         }
-        else return new ResponseEntity<>(updated, HttpStatus.BAD_REQUEST);
+        else return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
     }
 }
