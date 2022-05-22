@@ -1,6 +1,7 @@
 package com.onlinetrademanager.Controllers;
 
 import com.onlinetrademanager.DataTransferObjects.Stores.StoreEdit;
+import com.onlinetrademanager.DataTransferObjects.Stores.StoreList;
 import com.onlinetrademanager.Models.Store;
 import com.onlinetrademanager.Services.StoresService;
 import org.springframework.http.HttpStatus;
@@ -12,26 +13,25 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/Store")
-public class StoreController {
+public class StoresController {
 
     private final StoresService storesService;
 
-    public StoreController(StoresService storesService){
+    public StoresController(StoresService storesService){
         this.storesService = storesService;
     }
 
     @GetMapping
-    public ResponseEntity<Store> getStore(@RequestParam UUID id) {
-        Store store = storesService.findStoreById(id);
+    public ResponseEntity<StoreList> getStore(@RequestParam UUID id) {
+        StoreList store = storesService.findStoreById(id);
         return new ResponseEntity<>(store, HttpStatus.OK);
     }
 
     @GetMapping("/All")
-    public ResponseEntity<List<Store>> getAllOrders() {
-        List<Store> stores = storesService.findAllStores();
+    public ResponseEntity<List<StoreList>> getAllStores(@RequestParam UUID userId) {
+        List<StoreList> stores = storesService.findAllStores(userId);
         return new ResponseEntity<>(stores, HttpStatus.OK);
     }
-
 
     @PostMapping()
     public ResponseEntity<UUID> addStore(@RequestBody StoreEdit store) {

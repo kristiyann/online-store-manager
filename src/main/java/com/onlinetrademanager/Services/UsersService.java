@@ -81,7 +81,7 @@ public class UsersService {
 
     /** region Converter methods **/
 
-    private UserList convertDbObjToUserList(User user) {
+    public UserList convertDbObjToUserList(User user) {
         UserList userList = new UserList();
 
         userList.setId(user.getId());

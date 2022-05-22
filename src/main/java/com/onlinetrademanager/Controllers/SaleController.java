@@ -1,9 +1,8 @@
 package com.onlinetrademanager.Controllers;
 
-import com.onlinetrademanager.Models.Image;
-import com.onlinetrademanager.Models.Item;
+import com.onlinetrademanager.DataTransferObjects.Sales.SaleEdit;
+import com.onlinetrademanager.DataTransferObjects.Sales.SaleList;
 import com.onlinetrademanager.Models.Sale;
-import com.onlinetrademanager.Services.ItemService;
 import com.onlinetrademanager.Services.SaleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,25 +23,25 @@ public class SaleController {
     }
 
     @GetMapping
-    public ResponseEntity<Sale> getSale(@RequestParam UUID id) {
-        Sale sale = saleService.findSaleById(id);
+    public ResponseEntity<SaleList> getSale(@RequestParam UUID id) {
+        SaleList sale = saleService.findSaleById(id);
         return new ResponseEntity<>(sale, HttpStatus.OK);
     }
 
     @GetMapping("/All")
-    public ResponseEntity<List<Sale>> getAllSales() {
-        List<Sale> sales = saleService.findAllSales();
+    public ResponseEntity<List<SaleList>> getAllSales() {
+        List<SaleList> sales = saleService.findAllSales();
         return new ResponseEntity<>(sales, HttpStatus.OK);
     }
 
     @PostMapping()
-    public ResponseEntity<Sale> addSale(@RequestBody Sale sale) {
+    public ResponseEntity<Sale> addSale(@RequestBody SaleEdit sale) {
         Sale newSale = saleService.insertSale(sale);
         return new ResponseEntity<>(newSale, HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public ResponseEntity<Sale> updateSale(@RequestBody Sale sale) {
+    public ResponseEntity<Sale> updateSale(@RequestBody SaleEdit sale) {
         Sale updateSale = null;
         try {
             updateSale = saleService.updateSale(sale);

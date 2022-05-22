@@ -1,6 +1,7 @@
 package com.onlinetrademanager.Services;
 
 import com.onlinetrademanager.DataTransferObjects.Stores.StoreEdit;
+import com.onlinetrademanager.DataTransferObjects.Stores.StoreList;
 import com.onlinetrademanager.Exceptions.StoreNotFoundException;
 import com.onlinetrademanager.Exceptions.UserNotFoundException;
 import com.onlinetrademanager.Models.Store;
@@ -14,6 +15,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -47,13 +49,23 @@ public class StoresService {
         storesRepository.deleteStoreById(id);
     }
 
-    public Store findStoreById(UUID id){
-        return storesRepository.findStoreById(id).orElseThrow(()
+    public StoreList findStoreById(UUID id){
+        return storesRepository.findStoreById(id)
+                .stream()
+                .map(this::convertDbObjToList)
+                .findFirst()
+                .orElseThrow(()
                 -> new StoreNotFoundException("Store " + id + "not found!"));
     }
 
-    public List<Store> findAllStores(){
-        return storesRepository.findAll();
+    public List<StoreList> findAllStores(UUID userId){
+        User user = usersRepository.findUserById(userId).orElseThrow(()
+                -> new UserNotFoundException("User " + userId + "not found!"));
+
+        return storesRepository.findAllStoresByUser(user)
+                .stream()
+                .map(this::convertDbObjToList)
+                .collect(Collectors.toList());
     }
 
     //#region Helper methods
@@ -62,12 +74,23 @@ public class StoresService {
         Store store = new Store();
 
         User user = usersRepository.findUserById(editModel.getUserId())
-                .orElseThrow(() -> new UserNotFoundException("Store " + editModel.getUserId() + "not found!"));
+                .orElseThrow(() -> new UserNotFoundException("User " + editModel.getUserId() + "not found!"));
 
         store.setId(editModel.getId());
         store.setActive(editModel.getActive());
         store.setAddress(editModel.getAddress());
         store.setUser(user);
+
+        return store;
+    }
+
+    public StoreList convertDbObjToList(Store dbObj) {
+        StoreList store = new StoreList();
+
+        store.setId(dbObj.getId());
+        store.setActive(dbObj.getActive());
+        store.setAddress(dbObj.getAddress());
+        store.setUserId(dbObj.getUser().getId());
 
         return store;
     }

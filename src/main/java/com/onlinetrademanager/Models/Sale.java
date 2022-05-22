@@ -31,22 +31,21 @@ public class Sale implements Serializable {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    // @JsonFormat(pattern = "dd/MM/yyyy")
+    // @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate startDate;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    // @JsonFormat(pattern = "dd/MM/yyyy")
+    // @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate endDate;
 
     @NotNull
-    private BigDecimal salePercentage;
+    private int salePercentage;
 
     // Relations
 
-    // @NotNull
     @OneToMany
-    @JoinColumn(name = "sale", nullable = false)
+    @JoinColumn(name = "sale_id", nullable = true)
     private Set<Item> items = new HashSet<>();
 
     public Sale() {
@@ -57,7 +56,7 @@ public class Sale implements Serializable {
         setEndDate(sale.getEndDate());
     }
 
-    public Sale(LocalDate startDate, LocalDate saleEndDate, BigDecimal salePercentage){
+    public Sale(LocalDate startDate, LocalDate saleEndDate, int salePercentage){
         setStartDate(startDate);
         setEndDate(saleEndDate);
         setSalePercentage(salePercentage);
@@ -87,15 +86,23 @@ public class Sale implements Serializable {
         this.endDate = saleEndDate;
     }
 
-    public BigDecimal getSalePercentage() {
+    public int getSalePercentage() {
         return salePercentage;
     }
 
-    public void setSalePercentage(BigDecimal salePercentage) {
+    public void setSalePercentage(int salePercentage) {
         this.salePercentage = salePercentage;
     }
 
     public void setItems(HashSet<Item> items) {
+        this.items = items;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setItems(Set<Item> items) {
         this.items = items;
     }
 }

@@ -11,7 +11,7 @@ import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @JsonIdentityInfo(
@@ -48,15 +48,16 @@ public class Item implements Serializable {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate changeDate;
 
-    // one to one
-    // NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Sale sale;
 
-    // one to one
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Store store;
+
+    @OneToMany
+    @JoinColumn(name = "item_id")
+    private Set<Image> images = new HashSet<>();
 
 
     public Item() {
@@ -84,6 +85,10 @@ public class Item implements Serializable {
         setCreateDate(LocalDate.now());
         setStore(store);
         setSale(sale);
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public UUID getId() {
@@ -152,6 +157,14 @@ public class Item implements Serializable {
 
     public void setStore(Store store) {
         this.store = store;
+    }
+
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
     }
 
     @Override
