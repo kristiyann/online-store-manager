@@ -94,10 +94,6 @@ public class Sale implements Serializable {
         this.salePercentage = salePercentage;
     }
 
-    public void setItems(HashSet<Item> items) {
-        this.items = items;
-    }
-
     public void setId(UUID id) {
         this.id = id;
     }

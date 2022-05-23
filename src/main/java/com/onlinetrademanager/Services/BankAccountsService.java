@@ -71,9 +71,9 @@ public class BankAccountsService {
         BankAccount bankAccount = new BankAccount();
 
         bankAccount.setBankName(bankAccountInsert.getBankName());
-        bankAccount.setCardNumber(bankAccountInsert.getCardNumber());
-        bankAccount.setCVV(bankAccountInsert.getCVV());
-        bankAccount.setExpiryDate(bankAccountInsert.getExpiryDate());
+        bankAccount.setNumber(bankAccountInsert.getCardNumber());
+//        bankAccount.setCVV(bankAccountInsert.getCVV());
+//        bankAccount.setExpiryDate(bankAccountInsert.getExpiryDate());
 
         Client client = clientsRepository.getById(bankAccountInsert.getClientId());
 
@@ -87,9 +87,9 @@ public class BankAccountsService {
 
         bankAccountList.setId(bankAccount.getId());
         bankAccountList.setBankName(bankAccount.getBankName());
-        bankAccountList.setCardNumber(bankAccount.getCardNumber());
-        bankAccountList.setCVV(bankAccount.getCVV());
-        bankAccountList.setExpiryDate(bankAccount.getExpiryDate());
+        bankAccountList.setCardNumber(bankAccount.getNumber());
+//        bankAccountList.setCVV(bankAccount.getCVV());
+//        bankAccountList.setExpiryDate(bankAccount.getExpiryDate());
 
         return bankAccountList;
     }
@@ -98,9 +98,9 @@ public class BankAccountsService {
         BankAccount bankAccount = new BankAccount();
 
         bankAccount.setBankName(bankAccountEdit.getBankName());
-        bankAccount.setCardNumber(bankAccountEdit.getCardNumber());
-        bankAccount.setCVV(bankAccountEdit.getCVV());
-        bankAccount.setExpiryDate(bankAccountEdit.getExpiryDate());
+        bankAccount.setNumber(bankAccountEdit.getCardNumber());
+//        bankAccount.setCVV(bankAccountEdit.getCVV());
+//        bankAccount.setExpiryDate(bankAccountEdit.getExpiryDate());
         bankAccount.setId(bankAccountEdit.getId());
 
         return bankAccount;

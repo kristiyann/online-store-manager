@@ -2,14 +2,22 @@ package com.onlinetrademanager.Services;
 
 import com.onlinetrademanager.DataTransferObjects.Clients.ClientEdit;
 import com.onlinetrademanager.DataTransferObjects.Clients.ClientList;
+import com.onlinetrademanager.DataTransferObjects.Relations.ItemsInClientCart;
+import com.onlinetrademanager.DataTransferObjects.XRefs.XRefClientsItemsList;
 import com.onlinetrademanager.Exceptions.NotFoundException;
+import com.onlinetrademanager.Models.Item;
 import com.onlinetrademanager.Models.Users.Client;
+import com.onlinetrademanager.Models.XRefClientsItems;
 import com.onlinetrademanager.Repositories.ClientsRepository;
+import com.onlinetrademanager.Repositories.ItemsRepository;
+import com.onlinetrademanager.Repositories.XRefClientsItemsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,11 +33,21 @@ import java.util.stream.Collectors;
 public class ClientsService {
     private final ClientsRepository clientsRepository;
     private final BankAccountsService bankAccountsService;
+    private final ItemsRepository itemsRepository;
+    private final ItemsService itemsService;
+    private final XRefClientsItemsRepository xRefClientsItemsRepository;
 
     @Autowired
-    public ClientsService(ClientsRepository clientsRepository, BankAccountsService bankAccountsService) {
+    public ClientsService(ClientsRepository clientsRepository,
+                          BankAccountsService bankAccountsService,
+                          ItemsRepository itemsRepository,
+                          ItemsService itemsService,
+                          XRefClientsItemsRepository xRefClientsItemsRepository) {
         this.clientsRepository = clientsRepository;
         this.bankAccountsService = bankAccountsService;
+        this.itemsRepository = itemsRepository;
+        this.itemsService = itemsService;
+        this.xRefClientsItemsRepository = xRefClientsItemsRepository;
     }
 
     public UUID insertClient(Client client) {
@@ -77,23 +95,68 @@ public class ClientsService {
         return updated;
     }
 
+    public ClientList addRemoveItemToCart(ItemsInClientCart itemsInClientCart) {
+        Client client = clientsRepository.findClientById(itemsInClientCart.getClientId())
+                .orElseThrow(() -> new NotFoundException("Client " + itemsInClientCart.getClientId() + "not found!"));
+
+        Item item = itemsRepository.findItemById(itemsInClientCart.getItemId())
+                .orElseThrow(() -> new NotFoundException("Item " + itemsInClientCart.getItemId() + "not found!"));
+
+        XRefClientsItems xRefClientsItems;
+        if (itemsInClientCart.isInsert()) {
+            xRefClientsItems = xRefClientsItemsRepository.getByClientAndItem(client, item)
+                    .orElse(null);
+
+            if (xRefClientsItems != null) {
+                xRefClientsItems.setItemQuantity(xRefClientsItems.getItemQuantity() + 1);
+            } else {
+                xRefClientsItems = new XRefClientsItems();
+                xRefClientsItems.setClient(client);
+                xRefClientsItems.setItem(item);
+                xRefClientsItems.setCreateDate(LocalDate.now());
+                xRefClientsItems.setItemQuantity(1);
+            }
+
+            client.getCart().add(xRefClientsItems);
+            item.getClientCarts().add(xRefClientsItems);
+            xRefClientsItemsRepository.save(xRefClientsItems);
+
+        } else {
+            xRefClientsItems = xRefClientsItemsRepository.getByClientAndItem(client, item)
+                    .orElseThrow(() -> new NotFoundException("Client: " + client.getId() + "'s card doesn't contain item with id: " + item.getId()));
+
+            client.getCart().remove(xRefClientsItems);
+            item.getClientCarts().remove(xRefClientsItems);
+            xRefClientsItemsRepository.delete(xRefClientsItems);
+        }
+
+        clientsRepository.save(client);
+        itemsRepository.save(item);
+
+        return convertDbObjToClientList(client);
+    }
+
     /** region Converter methods **/
 
-    private ClientList convertDbObjToClientList(Client client) {
+    public ClientList convertDbObjToClientList(Client client) {
         ClientList clientList = new ClientList();
 
         clientList.setId(client.getId());
         clientList.setDtype(client.getDtype());
         clientList.setEmail(client.getEmail());
         clientList.setUsername(client.getUsername());
-        //clientList.getBankAccounts().addAll(client.getBankAccounts());
 
-//        if (client.getBankAccounts() != null && !client.getBankAccounts().isEmpty()) {
-//            for (BankAccount bankAccount : client.getBankAccounts()) {
-//                BankAccountList bankAccountList = bankAccountsService.convertDbObjToBankAccountList(bankAccount);
-//                clientList.addBankAccount(bankAccountList);
-//            }
-//        }
+        clientList.setCart(new HashSet<>());
+        for (XRefClientsItems xRefClientsItems : client.getCart()) {
+            XRefClientsItemsList xRefClientsItemsList = new XRefClientsItemsList();
+
+            xRefClientsItemsList.setxRefId(xRefClientsItems.getId());
+            xRefClientsItemsList.setItem(itemsService.convertDbObjToList(xRefClientsItems.getItem()));
+            xRefClientsItemsList.setCreateDate(xRefClientsItems.getCreateDate());
+            xRefClientsItemsList.setItemQuantity(xRefClientsItems.getItemQuantity());
+
+            clientList.getCart().add(xRefClientsItemsList);
+        }
 
         return clientList;
     }

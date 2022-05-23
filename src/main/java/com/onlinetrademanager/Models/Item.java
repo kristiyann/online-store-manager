@@ -1,9 +1,11 @@
 package com.onlinetrademanager.Models;
 import com.fasterxml.jackson.annotation.*;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
+import com.onlinetrademanager.Models.Users.Client;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -40,15 +42,16 @@ public class Item implements Serializable {
     @Positive
     private BigDecimal price;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate createDate;
+//    @JsonFormat(pattern = "dd/MM/yyyy")
+//    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private final LocalDate createDate = LocalDate.now();
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+//    @JsonFormat(pattern = "dd/MM/yyyy")
+//    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate changeDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Nullable
     private Sale sale;
 
     @NotNull
@@ -58,6 +61,16 @@ public class Item implements Serializable {
     @OneToMany
     @JoinColumn(name = "item_id")
     private Set<Image> images = new HashSet<>();
+
+//    @ManyToMany
+//    @JsonIgnore
+//    private Set<Client> ClientCarts = new HashSet<>();
+
+    @OneToMany
+    private Set<XRefClientsItems> clientCarts = new HashSet<>();
+
+    @OneToMany
+    private Set<XRefOrdersItems> orders = new HashSet<>();
 
 
     public Item() {
@@ -70,7 +83,7 @@ public class Item implements Serializable {
         setPrice(item.getPrice());
         setStore(item.getStore());
         setSale(item.getSale());
-        setCreateDate(item.getCreateDate());
+        // setCreateDate(item.getCreateDate());
         setChangeDate(item.getChangeDate());
     }
 
@@ -82,7 +95,7 @@ public class Item implements Serializable {
         setDescription(description);
         setCategory(itemCategory);
         setPrice(itemPrice);
-        setCreateDate(LocalDate.now());
+        // setCreateDate(LocalDate.now());
         setStore(store);
         setSale(sale);
     }
@@ -131,9 +144,9 @@ public class Item implements Serializable {
         return createDate;
     }
 
-    public void setCreateDate(LocalDate itemCreateDate) {
-        this.createDate = itemCreateDate;
-    }
+//    public void setCreateDate(LocalDate itemCreateDate) {
+//        this.createDate = itemCreateDate;
+//    }
 
     public LocalDate getChangeDate() {
         return changeDate;
@@ -165,6 +178,22 @@ public class Item implements Serializable {
 
     public void setImages(Set<Image> images) {
         this.images = images;
+    }
+
+    public Set<XRefClientsItems> getClientCarts() {
+        return clientCarts;
+    }
+
+    public void setClientCarts(Set<XRefClientsItems> clientCarts) {
+        this.clientCarts = clientCarts;
+    }
+
+    public Set<XRefOrdersItems> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<XRefOrdersItems> orders) {
+        this.orders = orders;
     }
 
     @Override

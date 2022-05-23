@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -30,13 +29,13 @@ public class StoresService {
     }
 
     public UUID insertStore(StoreEdit store){
-        Store dbObj = convertEditToDbObj(store);
+        Store dbObj = this.convertEditToDbObj(store);
         storesRepository.save(dbObj);
         return dbObj.getId();
     }
 
     public Store updateStore(StoreEdit store){
-        Store storeUpd = convertEditToDbObj(store);
+        Store storeUpd = this.convertEditToDbObj(store);
         storesRepository.save(storeUpd);
         return storeUpd;
     }
@@ -58,11 +57,18 @@ public class StoresService {
                 -> new StoreNotFoundException("Store " + id + "not found!"));
     }
 
-    public List<StoreList> findAllStores(UUID userId){
+    public List<StoreList> findAllStoresByUser(UUID userId){
         User user = usersRepository.findUserById(userId).orElseThrow(()
                 -> new UserNotFoundException("User " + userId + "not found!"));
 
         return storesRepository.findAllStoresByUser(user)
+                .stream()
+                .map(this::convertDbObjToList)
+                .collect(Collectors.toList());
+    }
+
+    public List<StoreList> findAllStores(){
+        return storesRepository.findAll()
                 .stream()
                 .map(this::convertDbObjToList)
                 .collect(Collectors.toList());

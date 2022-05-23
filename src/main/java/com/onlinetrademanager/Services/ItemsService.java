@@ -1,18 +1,19 @@
 package com.onlinetrademanager.Services;
 
+import com.onlinetrademanager.DataTransferObjects.Clients.ClientList;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemEdit;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
+import com.onlinetrademanager.DataTransferObjects.Relations.ItemsInClientCart;
 import com.onlinetrademanager.Exceptions.ItemNotFoundException;
+import com.onlinetrademanager.Exceptions.NotFoundException;
 import com.onlinetrademanager.Exceptions.SaleNotFoundException;
 import com.onlinetrademanager.Exceptions.StoreNotFoundException;
 import com.onlinetrademanager.Models.Image;
 import com.onlinetrademanager.Models.Item;
 import com.onlinetrademanager.Models.Sale;
 import com.onlinetrademanager.Models.Store;
-import com.onlinetrademanager.Repositories.ImageRepository;
-import com.onlinetrademanager.Repositories.ItemsRepository;
-import com.onlinetrademanager.Repositories.SaleRepository;
-import com.onlinetrademanager.Repositories.StoresRepository;
+import com.onlinetrademanager.Models.Users.Client;
+import com.onlinetrademanager.Repositories.*;
 import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,19 +31,25 @@ public class ItemsService {
     public final StoresRepository storesRepository;
     public final SaleRepository saleRepository;
     public final ImageRepository imageRepository;
+    public final ClientsRepository clientsRepository;
 
     @Autowired
-    public ItemsService(ItemsRepository itemsRepository, StoresRepository storesRepository, SaleRepository saleRepository, ImageRepository imageRepository){
+    public ItemsService(ItemsRepository itemsRepository,
+                        StoresRepository storesRepository,
+                        SaleRepository saleRepository,
+                        ImageRepository imageRepository,
+                        ClientsRepository clientsRepository){
         this.itemsRepository = itemsRepository;
         this.storesRepository = storesRepository;
         this.saleRepository = saleRepository;
         this.imageRepository = imageRepository;
+        this.clientsRepository = clientsRepository;
     }
 
     public UUID insertItem(ItemEdit item){
         Item dbObj = convertEditToDbObj(item);
 
-        dbObj.setCreateDate(LocalDate.now());
+        // dbObj.setCreateDate(LocalDate.now());
 
         Set<Image> images = new HashSet<>();
         for (String url : item.getImageUrls()) {
@@ -61,6 +68,7 @@ public class ItemsService {
 
     public Item updateItem(ItemEdit item){
         Item itemUpd = convertEditToDbObj(item);
+
         itemsRepository.save(itemUpd);
         return itemUpd;
     }
@@ -82,19 +90,25 @@ public class ItemsService {
                 -> new ItemNotFoundException("Item " + id + "not found!"));
     }
 
-    public List<ItemList> findAllItems(){
-        return itemsRepository.findAll()
-                .stream()
+    public List<ItemList> findAllItems(Integer skip, Integer top){
+        List<Item> query = itemsRepository.findAll();
+
+        query = applyPagination(query, skip, top);
+
+        return query.stream()
                 .map(this::convertDbObjToList)
                 .collect(Collectors.toList());
     }
 
-    public List<ItemList> findAllItemsByStore(UUID storeId){
-
+    public List<ItemList> findAllItemsByStore(UUID storeId, Integer skip, Integer top) {
         Store store = storesRepository.findStoreById(storeId).orElseThrow(()
                 -> new ItemNotFoundException("Store " + storeId + "not found!"));
-        return itemsRepository.findAllImagesByStore(store)
-                .stream()
+
+        List<Item> query =  itemsRepository.findAllImagesByStore(store);
+
+        query = applyPagination(query, skip, top);
+
+        return query.stream()
                 .map(this::convertDbObjToList)
                 .collect(Collectors.toList());
     }
@@ -122,7 +136,7 @@ public class ItemsService {
         return item;
     }
 
-    private ItemList convertDbObjToList(Item item) {
+    public ItemList convertDbObjToList(Item item) {
         ItemList itemList = new ItemList();
 
         itemList.setId(item.getId());
@@ -135,7 +149,6 @@ public class ItemsService {
         itemList.setOriginalPrice(item.getPrice());
 
         List<String> imageUrls = new ArrayList<>();
-        // TODO
         for (Image image : item.getImages()) {
             imageUrls.add(image.getUrl());
         }
@@ -155,5 +168,19 @@ public class ItemsService {
         }
 
         return itemList;
+    }
+
+    public static List<Item> applyPagination(List<Item> query, Integer skip, Integer top) {
+        if (skip == null) {
+            skip = 0;
+        }
+
+        query = query.stream().skip(skip).collect(Collectors.toList());
+
+        if (top != null) {
+            query = query.stream().limit(top).collect(Collectors.toList());
+        }
+
+        return query;
     }
 }

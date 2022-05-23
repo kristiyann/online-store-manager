@@ -26,13 +26,13 @@ public class BankAccount implements Serializable {
     private String bankName;
 
     @CreditCardNumber
-    private String cardNumber;
+    private String number;
 
-    @Column(length = 3)
-    private String CVV;
+//    @Column(length = 3)
+//    private String CVV;
 
-    @DateTimeFormat
-    private LocalDate expiryDate;
+//    @DateTimeFormat
+//    private LocalDate expiryDate;
 
     @NotNull
     @ManyToOne
@@ -42,12 +42,12 @@ public class BankAccount implements Serializable {
     public BankAccount() {
     }
 
-    public BankAccount(UUID id, String bankName, String cardNumber, String CVV, LocalDate expiryDate, Client client) {
+    public BankAccount(UUID id, String bankName, String number, Client client) {
         this.id = id;
         this.bankName = bankName;
-        this.cardNumber = cardNumber;
-        this.CVV = CVV;
-        this.expiryDate = expiryDate;
+        this.number = number;
+//        this.CVV = CVV;
+//        this.expiryDate = expiryDate;
         this.client = client;
     }
 
@@ -67,29 +67,29 @@ public class BankAccount implements Serializable {
         this.bankName = bankName;
     }
 
-    public String getCardNumber() {
-        return cardNumber;
+    public String getNumber() {
+        return number;
     }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
+    public void setNumber(String cardNumber) {
+        this.number = cardNumber;
     }
 
-    public String getCVV() {
-        return CVV;
-    }
-
-    public void setCVV(String CVV) {
-        this.CVV = CVV;
-    }
-
-    public LocalDate getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(LocalDate expiryDate) {
-        this.expiryDate = expiryDate;
-    }
+//    public String getCVV() {
+//        return CVV;
+//    }
+//
+//    public void setCVV(String CVV) {
+//        this.CVV = CVV;
+//    }
+//
+//    public LocalDate getExpiryDate() {
+//        return expiryDate;
+//    }
+//
+//    public void setExpiryDate(LocalDate expiryDate) {
+//        this.expiryDate = expiryDate;
+//    }
 
     public Client getClient() {
         return client;
@@ -104,9 +104,9 @@ public class BankAccount implements Serializable {
         return "BankAccount{" +
                 "id=" + id +
                 ", bankName='" + bankName + '\'' +
-                ", cardNumber='" + cardNumber + '\'' +
-                ", CVV='" + CVV + '\'' +
-                ", expiryDate=" + expiryDate +
+                ", cardNumber='" + number + '\'' +
+//                ", CVV='" + CVV + '\'' +
+//                ", expiryDate=" + expiryDate +
                 ", client=" + client +
                 '}';
     }

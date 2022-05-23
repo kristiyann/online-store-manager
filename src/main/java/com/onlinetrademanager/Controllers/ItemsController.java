@@ -30,14 +30,14 @@ public class ItemsController {
     }
 
     @GetMapping("/All")
-    public ResponseEntity<List<ItemList>> getAllItems() {
-        List<ItemList> items = itemsService.findAllItems();
+    public ResponseEntity<List<ItemList>> getAllItems(Integer skip, Integer top) {
+        List<ItemList> items = itemsService.findAllItems(skip, top);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
     @GetMapping("/Store")
-    public ResponseEntity<List<ItemList>> getAllItemsByStore(@RequestParam UUID storeId) {
-        List<ItemList> items = itemsService.findAllItemsByStore(storeId);
+    public ResponseEntity<List<ItemList>> getAllItemsByStore(@RequestParam UUID storeId, Integer skip, Integer top) {
+        List<ItemList> items = itemsService.findAllItemsByStore(storeId, skip, top);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 

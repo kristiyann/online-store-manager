@@ -1,8 +1,11 @@
 package com.onlinetrademanager.DataTransferObjects.Clients;
 
 import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountList;
+import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
+import com.onlinetrademanager.DataTransferObjects.XRefs.XRefClientsItemsList;
 import com.onlinetrademanager.Enums.Users.UserRole;
 import com.onlinetrademanager.Models.BankAccount;
+import com.onlinetrademanager.Models.Item;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -16,7 +19,7 @@ public class ClientList implements Serializable {
     // private boolean active;
     private String dtype;
     //private Set<BankAccountList> bankAccounts = new HashSet<>();
-    // private HashSet<Item> cart;
+    private Set<XRefClientsItemsList> cart;
     // private HashSet<Order> purchaseHistory;
 
     public ClientList() {
@@ -54,7 +57,15 @@ public class ClientList implements Serializable {
         this.email = email;
     }
 
-//    public void setActive(boolean active) {
+    public void setCart(Set<XRefClientsItemsList> cart) {
+        this.cart = cart;
+    }
+
+    public Set<XRefClientsItemsList> getCart() {
+        return cart;
+    }
+
+    //    public void setActive(boolean active) {
 //        this.active = active;
 //    }
 

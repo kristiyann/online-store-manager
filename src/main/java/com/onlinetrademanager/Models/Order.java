@@ -6,12 +6,13 @@ import com.onlinetrademanager.Enums.Order.OrderStatus;
 import com.onlinetrademanager.Models.Users.User;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -34,15 +35,15 @@ public class Order {
 
     @NotNull
     @Enumerated
-    private OrderStatus orderStatus;
+    private OrderStatus status;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate orderCreateDate;
+//    @JsonFormat(pattern = "dd/MM/yyyy")
+//    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate createDate;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate orderChangeDate;
+//    @JsonFormat(pattern = "dd/MM/yyyy")
+//    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate changeDate;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -56,27 +57,29 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     private Store store;
 
-    public Order() {
+//    @ManyToMany
+//    private Set<Item> items = new HashSet<>();
 
+    public Order() {
     }
 
     public Order(Order order) {
         setTotalPrice(order.getTotalPrice());
-        setOrderStatus(order.getOrderStatus());
-        setOrderCreateDate(order.getOrderCreateDate());
-        setOrderChangeDate(order.getOrderChangeDate());
+        setStatus(order.getStatus());
+        setCreateDate(order.getCreateDate());
+        setChangeDate(order.getChangeDate());
         setDeliveryCompany(order.getDeliveryCompany());
         setUser(order.getUser());
         setStore(order.getStore());
 
     }
 
-    public Order(BigDecimal totalPrice, OrderStatus orderStatus, DeliveryCompany deliveryCompany,
+    public Order(BigDecimal totalPrice, OrderStatus status, DeliveryCompany deliveryCompany,
                  User user, Store store) {
         setTotalPrice(totalPrice);
-        setOrderStatus(orderStatus);
-        setOrderCreateDate(LocalDate.now());
-        setOrderChangeDate(LocalDate.now());
+        setStatus(status);
+        setCreateDate(LocalDate.now());
+        setChangeDate(LocalDate.now());
         setDeliveryCompany(deliveryCompany);
         setUser(user);
         setStore(store);
@@ -99,28 +102,28 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
+    public OrderStatus getStatus() {
+        return status;
     }
 
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
+    public void setStatus(OrderStatus orderStatus) {
+        this.status = orderStatus;
     }
 
-    public LocalDate getOrderCreateDate() {
-        return orderCreateDate;
+    public LocalDate getCreateDate() {
+        return createDate;
     }
 
-    public void setOrderCreateDate(LocalDate orderCreateDate) {
-        this.orderCreateDate = orderCreateDate;
+    public void setCreateDate(LocalDate orderCreateDate) {
+        this.createDate = orderCreateDate;
     }
 
-    public LocalDate getOrderChangeDate() {
-        return orderChangeDate;
+    public LocalDate getChangeDate() {
+        return changeDate;
     }
 
-    public void setOrderChangeDate(LocalDate orderChangeDate) {
-        this.orderChangeDate = orderChangeDate;
+    public void setChangeDate(LocalDate orderChangeDate) {
+        this.changeDate = orderChangeDate;
     }
 
     public DeliveryCompany getDeliveryCompany() {

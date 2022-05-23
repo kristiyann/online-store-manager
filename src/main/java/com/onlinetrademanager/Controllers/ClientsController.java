@@ -2,6 +2,7 @@ package com.onlinetrademanager.Controllers;
 
 import com.onlinetrademanager.DataTransferObjects.Clients.ClientEdit;
 import com.onlinetrademanager.DataTransferObjects.Clients.ClientList;
+import com.onlinetrademanager.DataTransferObjects.Relations.ItemsInClientCart;
 import com.onlinetrademanager.Models.Users.Client;
 import com.onlinetrademanager.Services.ClientsService;
 import org.springframework.http.HttpStatus;
@@ -52,5 +53,12 @@ public class ClientsController {
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
         else return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/AddRemoveFromCart")
+    public ResponseEntity<ClientList> addRemoveFromCart(@RequestBody ItemsInClientCart itemsInClientCart) {
+        ClientList clientList = clientsService.addRemoveItemToCart(itemsInClientCart);
+
+        return new ResponseEntity<>(clientList, HttpStatus.OK);
     }
 }

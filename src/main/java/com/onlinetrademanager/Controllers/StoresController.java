@@ -27,9 +27,15 @@ public class StoresController {
         return new ResponseEntity<>(store, HttpStatus.OK);
     }
 
+    @GetMapping("/User")
+    public ResponseEntity<List<StoreList>> getAllStoresByUser(@RequestParam UUID userId) {
+        List<StoreList> stores = storesService.findAllStoresByUser(userId);
+        return new ResponseEntity<>(stores, HttpStatus.OK);
+    }
+
     @GetMapping("/All")
-    public ResponseEntity<List<StoreList>> getAllStores(@RequestParam UUID userId) {
-        List<StoreList> stores = storesService.findAllStores(userId);
+    public ResponseEntity<List<StoreList>> getAllStores() {
+        List<StoreList> stores = storesService.findAllStores();
         return new ResponseEntity<>(stores, HttpStatus.OK);
     }
 
