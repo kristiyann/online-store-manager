@@ -16,12 +16,11 @@ public class XRefOrdersItems {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     private Order order;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     private Item item;
 
     int itemQuantity;

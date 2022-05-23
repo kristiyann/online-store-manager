@@ -1,9 +1,8 @@
 package com.onlinetrademanager.Models;
 
 
-import com.fasterxml.jackson.annotation.*;
 import com.onlinetrademanager.Enums.Order.OrderStatus;
-import com.onlinetrademanager.Models.Users.User;
+import com.onlinetrademanager.Models.Users.Client;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -16,13 +15,8 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Table(name="Order_User")
+@Table(name = "order_user")
 public class Order {
-
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
@@ -39,51 +33,40 @@ public class Order {
 
 //    @JsonFormat(pattern = "dd/MM/yyyy")
 //    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate createDate;
+    private final LocalDate createDate = LocalDate.now();
 
 //    @JsonFormat(pattern = "dd/MM/yyyy")
 //    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate changeDate;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     private DeliveryCompany deliveryCompany;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    private Client client;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Store store;
+//    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+//    private Store store;
 
-//    @ManyToMany
-//    private Set<Item> items = new HashSet<>();
+    @OneToMany(mappedBy = "order")
+    private Set<XRefOrdersItems> items = new HashSet<>();
 
     public Order() {
     }
 
-    public Order(Order order) {
-        setTotalPrice(order.getTotalPrice());
-        setStatus(order.getStatus());
-        setCreateDate(order.getCreateDate());
-        setChangeDate(order.getChangeDate());
-        setDeliveryCompany(order.getDeliveryCompany());
-        setUser(order.getUser());
-        setStore(order.getStore());
-
-    }
-
-    public Order(BigDecimal totalPrice, OrderStatus status, DeliveryCompany deliveryCompany,
-                 User user, Store store) {
-        setTotalPrice(totalPrice);
-        setStatus(status);
-        setCreateDate(LocalDate.now());
-        setChangeDate(LocalDate.now());
-        setDeliveryCompany(deliveryCompany);
-        setUser(user);
-        setStore(store);
-
+    public Order(UUID id, BigDecimal totalPrice, OrderStatus status, LocalDate changeDate, DeliveryCompany deliveryCompany, Client client,
+//                 Store store,
+                 Set<XRefOrdersItems> items) {
+        this.id = id;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.changeDate = changeDate;
+        this.deliveryCompany = deliveryCompany;
+        this.client = client;
+//        this.store = store;
+        this.items = items;
     }
 
     public UUID getId() {
@@ -114,9 +97,9 @@ public class Order {
         return createDate;
     }
 
-    public void setCreateDate(LocalDate orderCreateDate) {
-        this.createDate = orderCreateDate;
-    }
+//    public void setCreateDate(LocalDate orderCreateDate) {
+//        this.createDate = orderCreateDate;
+//    }
 
     public LocalDate getChangeDate() {
         return changeDate;
@@ -134,19 +117,27 @@ public class Order {
         this.deliveryCompany = deliveryCompany;
     }
 
-    public User getUser() {
-        return user;
+    public Client getClient() {
+        return client;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public Store getStore() {
-        return store;
+//    public Store getStore() {
+//        return store;
+//    }
+
+//    public void setStore(Store store) {
+//        this.store = store;
+//    }
+
+    public Set<XRefOrdersItems> getItems() {
+        return items;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
+    public void setItems(Set<XRefOrdersItems> items) {
+        this.items = items;
     }
 }

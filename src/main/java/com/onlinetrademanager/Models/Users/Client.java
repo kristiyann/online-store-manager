@@ -27,12 +27,7 @@ public class Client extends BaseUser implements Serializable {
     @OneToMany
     private Set<XRefClientsItems> cart = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "clients_orders",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
-    )
+    @OneToMany
     private Set<Order> orders;
 
     public Client() {

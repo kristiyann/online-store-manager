@@ -55,7 +55,7 @@ public class Item implements Serializable {
     private Sale sale;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Store store;
 
     @OneToMany
