@@ -112,7 +112,11 @@ public class ItemsService {
 
     private Item convertEditToDbObj(ItemEdit itemEdit) {
         Item item = itemsRepository.findItemById(itemEdit.getId())
-                .orElseThrow(() -> new ItemNotFoundException("Store " + itemEdit.getId() + "not found!"));
+                .orElse(null);
+
+        if (item == null) {
+            item = new Item();
+        }
 
         Store store = storesRepository.findStoreById(itemEdit.getStoreId())
                 .orElseThrow(() -> new StoreNotFoundException("Store with id" + itemEdit.getStoreId() + "not found."));

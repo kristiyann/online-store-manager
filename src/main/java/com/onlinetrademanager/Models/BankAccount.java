@@ -5,12 +5,10 @@ import com.onlinetrademanager.Models.Users.Client;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.CreditCardNumber;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -28,12 +26,6 @@ public class BankAccount implements Serializable {
     @CreditCardNumber
     private String number;
 
-//    @Column(length = 3)
-//    private String CVV;
-
-//    @DateTimeFormat
-//    private LocalDate expiryDate;
-
     @NotNull
     @ManyToOne
     @JsonIgnore
@@ -46,8 +38,6 @@ public class BankAccount implements Serializable {
         this.id = id;
         this.bankName = bankName;
         this.number = number;
-//        this.CVV = CVV;
-//        this.expiryDate = expiryDate;
         this.client = client;
     }
 
@@ -75,22 +65,6 @@ public class BankAccount implements Serializable {
         this.number = cardNumber;
     }
 
-//    public String getCVV() {
-//        return CVV;
-//    }
-//
-//    public void setCVV(String CVV) {
-//        this.CVV = CVV;
-//    }
-//
-//    public LocalDate getExpiryDate() {
-//        return expiryDate;
-//    }
-//
-//    public void setExpiryDate(LocalDate expiryDate) {
-//        this.expiryDate = expiryDate;
-//    }
-
     public Client getClient() {
         return client;
     }
@@ -105,9 +79,7 @@ public class BankAccount implements Serializable {
                 "id=" + id +
                 ", bankName='" + bankName + '\'' +
                 ", cardNumber='" + number + '\'' +
-//                ", CVV='" + CVV + '\'' +
-//                ", expiryDate=" + expiryDate +
-                ", client=" + client +
+                ", client=" + client.getId() +
                 '}';
     }
 }

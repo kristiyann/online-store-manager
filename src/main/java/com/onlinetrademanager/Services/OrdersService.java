@@ -1,6 +1,7 @@
 package com.onlinetrademanager.Services;
 
 import com.onlinetrademanager.DataTransferObjects.BatchChangeModel;
+import com.onlinetrademanager.DataTransferObjects.Orders.OrderCustomFilter;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderEdit;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderInsert;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderList;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class OrdersService {
-
     public final OrdersRepository ordersRepository;
     public final DeliveryCompaniesRepository deliveryCompaniesRepository;
     public final StoresRepository storesRepository;
@@ -133,16 +132,23 @@ public class OrdersService {
                 .collect(Collectors.toList());
     }
 
-    public List<OrderList> findAllOrdersByClient(UUID clientId){
+    public List<OrderList> findAllOrdersByClient(UUID clientId, OrderStatus status){
         Client client = clientsRepository.getById(clientId);
-        return ordersRepository.findAllOrdersByClient(client)
-                .stream()
+        List<Order> query = ordersRepository.findAllOrdersByClient(client);
+
+        query = this.applyCustomFilter(query, status);
+
+        return query.stream()
                 .map(this::convertDbObjToList)
                 .collect(Collectors.toList());
     }
 
-    public List<OrderList> findAllOrders(){ return ordersRepository.findAll()
-            .stream()
+    public List<OrderList> findAllOrders(OrderStatus status){
+        List<Order> query = ordersRepository.findAll();
+
+        query = this.applyCustomFilter(query, status);
+
+        return query.stream()
             .map(this::convertDbObjToList)
             .collect(Collectors.toList());
     }
@@ -203,7 +209,7 @@ public class OrdersService {
         order.setStatus(OrderStatus.CREATED);
         order.setItems(new HashSet<>());
         order.setClient(client);
-        order.setTotalPrice(BigDecimal.valueOf(0));
+        order.setTotalPrice(deliveryCompany.getDeliveryFee());
         // order.setStore(items.get(1).getStore());
 
         return order;
@@ -251,5 +257,27 @@ public class OrdersService {
         // order.setItems(new HashSet<>());
 
         return order;
+    }
+
+    private List<Order> applyCustomFilter(List<Order> query, OrderStatus customFilter) {
+//        if (customFilter != null) {
+//            if (customFilter.getStatus() != null) {
+//                query = query.stream()
+//                        .filter(order ->
+//                                order.getStatus().equals(customFilter.getStatus())
+//                        )
+//                        .collect(Collectors.toList());
+//            }
+//        }
+
+        if (customFilter != null) {
+            query = query.stream()
+                        .filter(order ->
+                                order.getStatus().equals(customFilter)
+                        )
+                        .collect(Collectors.toList());
+        }
+
+        return query;
     }
 }

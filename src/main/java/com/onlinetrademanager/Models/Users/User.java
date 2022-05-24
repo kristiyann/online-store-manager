@@ -2,14 +2,9 @@ package com.onlinetrademanager.Models.Users;
 
 import com.onlinetrademanager.Enums.Users.UserRole;
 import com.onlinetrademanager.Models.Store;
-import jdk.jfr.BooleanFlag;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -54,7 +49,6 @@ public class User extends BaseUser implements Serializable {
                 "id=" + getId() +
                 ", username='" + getUsername() + '\'' +
                 ", email='" + getEmail() + '\'' +
-                ", password='" + getPassword() + '\'' +
                 ", role=" + role +
                 '}';
     }

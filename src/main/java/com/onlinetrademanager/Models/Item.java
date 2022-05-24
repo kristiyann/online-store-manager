@@ -1,10 +1,11 @@
 package com.onlinetrademanager.Models;
-import com.fasterxml.jackson.annotation.*;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
-import com.onlinetrademanager.Models.Users.Client;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -12,9 +13,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @JsonIdentityInfo(
@@ -141,10 +143,6 @@ public class Item implements Serializable {
         return createDate;
     }
 
-//    public void setCreateDate(LocalDate itemCreateDate) {
-//        this.createDate = itemCreateDate;
-//    }
-
     public LocalDateTime getChangeDate() {
         return changeDate;
     }
@@ -195,6 +193,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
+        assert getSale() != null;
         return "Item[ " + getId() + " ]: " +
                 "Title: " + getTitle() +
                 "Description: " + getDescription() +

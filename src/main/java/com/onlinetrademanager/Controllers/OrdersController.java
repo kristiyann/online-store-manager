@@ -1,11 +1,10 @@
 package com.onlinetrademanager.Controllers;
 
 
-import com.onlinetrademanager.DataTransferObjects.BatchChangeModel;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderEdit;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderInsert;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderList;
-import com.onlinetrademanager.Models.Order;
+import com.onlinetrademanager.Enums.Order.OrderStatus;
 import com.onlinetrademanager.Services.OrdersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +30,8 @@ public class OrdersController {
     }
 
     @GetMapping("/All")
-    public ResponseEntity<List<OrderList>> getAllOrders() {
-        List<OrderList> orders = ordersService.findAllOrders();
+    public ResponseEntity<List<OrderList>> getAllOrders(@RequestParam(required = false) OrderStatus status) {
+        List<OrderList> orders = ordersService.findAllOrders(status);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
@@ -49,8 +48,8 @@ public class OrdersController {
 //    }
 
     @GetMapping("/Client")
-    public ResponseEntity<List<OrderList>> getAllOrdersByClient(UUID clientId) {
-        List<OrderList> orders = ordersService.findAllOrdersByClient(clientId);
+    public ResponseEntity<List<OrderList>> getAllOrdersByClient(@RequestParam UUID clientId, @RequestParam(required = false) OrderStatus status) {
+        List<OrderList> orders = ordersService.findAllOrdersByClient(clientId, status);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
