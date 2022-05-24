@@ -1,6 +1,8 @@
 package com.onlinetrademanager.Controllers;
 
 
+import com.onlinetrademanager.DataTransferObjects.BatchChangeModel;
+import com.onlinetrademanager.DataTransferObjects.Orders.OrderEdit;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderInsert;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderList;
 import com.onlinetrademanager.Models.Order;
@@ -64,16 +66,28 @@ public class OrdersController {
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 
-//    @PutMapping()
-//    public ResponseEntity<Order> updateOrder(@RequestBody Order order) {
-//        Order updateOrder = null;
+    @PutMapping()
+    public ResponseEntity<OrderList> updateOrder(@RequestBody OrderEdit order) {
+        OrderList updateOrder = null;
+        try {
+            updateOrder = ordersService.updateOrder(order);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(updateOrder, HttpStatus.OK);
+    }
+
+//    @PutMapping("/BatchChangeItems")
+//    public ResponseEntity<OrderList> batchChangeItems(@RequestBody BatchChangeModel batchChangeModel) {
+//        OrderList updateOrder = null;
 //        try {
-//            updateOrder = ordersService.updateOrder(order);
+//            updateOrder = ordersService.batchChangeItems(batchChangeModel);
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
 //        return new ResponseEntity<>(updateOrder, HttpStatus.OK);
 //    }
+    // ! Not going to be used
 
     @DeleteMapping()
     public ResponseEntity<?> deleteOrder(@RequestParam UUID id) {

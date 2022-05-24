@@ -1,5 +1,7 @@
 package com.onlinetrademanager.Services;
 
+import com.onlinetrademanager.DataTransferObjects.BatchChangeModel;
+import com.onlinetrademanager.DataTransferObjects.Orders.OrderEdit;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderInsert;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderList;
 import com.onlinetrademanager.DataTransferObjects.XRefs.XRefOrdersItemsList;
@@ -60,11 +62,51 @@ public class OrdersService {
         return order.getId();
     }
 
-//    public Order updateOrder(Order order){
-//        // Order orderUpd = new Order(order);
-////        ordersRepository.save(orderUpd);
-////        return orderUpd;
-//    }
+    public OrderList updateOrder(OrderEdit orderEdit){
+        Order orderUpd = convertEditToDbObj(orderEdit);
+
+        ordersRepository.save(orderUpd);
+
+        // this.addItemsToOrder(orderUpd.getId(), orderEdit.getItemIds());
+
+        return convertDbObjToList(orderUpd);
+    }
+
+    public OrderList batchChangeItems(BatchChangeModel batchChangeModel) {
+        Order order = ordersRepository.findOrderById(batchChangeModel.getObjectId())
+                .orElseThrow(() -> new NotFoundException("Order " + batchChangeModel.getObjectId() + "not found!"));
+
+        if (batchChangeModel.isInsert()) {
+            this.addItemsToOrder(order.getId(), batchChangeModel.getItemIds());
+        } else {
+//            for (XRefOrdersItems xRefOrdersItems : order.getItems()) {
+//                Item item = itemsRepository.findItemById(xRefOrdersItems.getItem().getId())
+//                        .orElseThrow(() -> new NotFoundException("Order " + xRefOrdersItems.getItem().getId() + "not found!"));
+//
+//                order.getItems().remove(xRefOrdersItems);
+//                item.getOrders().remove(xRefOrdersItems);
+//            }
+
+//            ordersRepository.save(order);
+
+            for (UUID itemId : batchChangeModel.getItemIds()) {
+                Item item = itemsRepository.findItemById(itemId)
+                        .orElseThrow(() -> new NotFoundException("Order " + itemId + "not found!"));
+
+                XRefOrdersItems xRefOrdersItems = xRefOrdersItemsRepository.getByOrderAndItem(order, item)
+                        .orElse(null);
+
+                item.getOrders().remove(xRefOrdersItems);
+                order.getItems().remove(xRefOrdersItems);
+
+                if (xRefOrdersItems != null) {
+                    this.xRefOrdersItemsRepository.delete(xRefOrdersItems);
+                }
+            }
+        }
+
+        return convertDbObjToList(order);
+    }
 
     public void deleteOrderById(UUID id){
         ordersRepository.deleteOrderById(id);
@@ -111,7 +153,7 @@ public class OrdersService {
 //        return ordersRepository.findAllOrdersByStore(store);
 //    }
 
-    public Order addItemsToOrder(UUID orderId, List<UUID> itemIds) {
+    public void addItemsToOrder(UUID orderId, List<UUID> itemIds) {
         Order order = ordersRepository.findOrderById(orderId).orElseThrow(()
                 -> new OrderNotFoundException("Order " + orderId + "not found!"));
 
@@ -142,8 +184,6 @@ public class OrdersService {
         }
 
         this.ordersRepository.save(order);
-
-        return order;
     }
 
     //#region Helper methods
@@ -194,5 +234,22 @@ public class OrdersService {
         orderList.setItems(xRefCollection);
 
         return orderList;
+    }
+
+    private Order convertEditToDbObj(OrderEdit orderEdit) {
+        Order order = ordersRepository.findOrderById(orderEdit.getId())
+                .orElseThrow(() -> new NotFoundException("Order " + orderEdit.getId() + "not found!"));
+
+        DeliveryCompany deliveryCompany = deliveryCompaniesRepository.findDeliveryCompanyById(orderEdit.getDeliveryCompanyId())
+                .orElseThrow(() -> new NotFoundException("Delivery Company " + orderEdit.getDeliveryCompanyId() + "not found!"));
+
+        order.setStatus(orderEdit.getStatus());
+        order.setChangeDate(LocalDate.now());
+        order.setDeliveryCompany(deliveryCompany);
+        order.setChangeDate(LocalDate.now());
+
+        // order.setItems(new HashSet<>());
+
+        return order;
     }
 }

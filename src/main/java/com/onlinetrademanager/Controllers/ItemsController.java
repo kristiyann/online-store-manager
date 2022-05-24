@@ -48,8 +48,8 @@ public class ItemsController {
     }
 
     @PutMapping()
-    public ResponseEntity<Item> updateItem(@RequestBody ItemEdit item) {
-        Item updateItem = null;
+    public ResponseEntity<ItemList> updateItem(@RequestBody ItemEdit item) {
+        ItemList updateItem = null;
         try {
             updateItem = itemsService.updateItem(item);
         } catch (Exception e) {

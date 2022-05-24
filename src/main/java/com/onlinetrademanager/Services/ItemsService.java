@@ -1,26 +1,21 @@
 package com.onlinetrademanager.Services;
 
-import com.onlinetrademanager.DataTransferObjects.Clients.ClientList;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemEdit;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
-import com.onlinetrademanager.DataTransferObjects.Relations.ItemsInClientCart;
 import com.onlinetrademanager.Exceptions.ItemNotFoundException;
-import com.onlinetrademanager.Exceptions.NotFoundException;
-import com.onlinetrademanager.Exceptions.SaleNotFoundException;
 import com.onlinetrademanager.Exceptions.StoreNotFoundException;
 import com.onlinetrademanager.Models.Image;
 import com.onlinetrademanager.Models.Item;
 import com.onlinetrademanager.Models.Sale;
 import com.onlinetrademanager.Models.Store;
-import com.onlinetrademanager.Models.Users.Client;
 import com.onlinetrademanager.Repositories.*;
-import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,11 +61,11 @@ public class ItemsService {
         return dbObj.getId();
     }
 
-    public Item updateItem(ItemEdit item){
+    public ItemList updateItem(ItemEdit item){
         Item itemUpd = convertEditToDbObj(item);
 
         itemsRepository.save(itemUpd);
-        return itemUpd;
+        return convertDbObjToList(itemUpd);
     }
 
     public void deleteItem(Item item){
@@ -116,7 +111,8 @@ public class ItemsService {
     //#region Helper methods
 
     private Item convertEditToDbObj(ItemEdit itemEdit) {
-        Item item = new Item();
+        Item item = itemsRepository.findItemById(itemEdit.getId())
+                .orElseThrow(() -> new ItemNotFoundException("Store " + itemEdit.getId() + "not found!"));
 
         Store store = storesRepository.findStoreById(itemEdit.getStoreId())
                 .orElseThrow(() -> new StoreNotFoundException("Store with id" + itemEdit.getStoreId() + "not found."));
@@ -126,7 +122,7 @@ public class ItemsService {
 
         item.setId(itemEdit.getId());
         item.setCategory(itemEdit.getCategory());
-        item.setChangeDate(LocalDate.now());
+        item.setChangeDate(LocalDateTime.now());
         item.setDescription(itemEdit.getDescription());
         item.setPrice(itemEdit.getPrice());
         item.setTitle(itemEdit.getTitle());

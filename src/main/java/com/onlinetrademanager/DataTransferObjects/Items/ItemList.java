@@ -1,13 +1,12 @@
 package com.onlinetrademanager.DataTransferObjects.Items;
 
 import com.onlinetrademanager.Enums.Item.ItemCategory;
-import com.onlinetrademanager.Models.Image;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -24,15 +23,15 @@ public class ItemList implements Serializable {
     @Positive
     private BigDecimal price;
     private BigDecimal originalPrice;
-    private LocalDate createDate;
-    private LocalDate changeDate;
+    private LocalDateTime createDate;
+    private LocalDateTime changeDate;
     private List<String> images = new ArrayList<>();
     private UUID storeId;
 
     public ItemList() {
     }
 
-    public ItemList(UUID id, String title, String description, ItemCategory category, BigDecimal price, LocalDate createDate, LocalDate changeDate) {
+    public ItemList(UUID id, String title, String description, ItemCategory category, BigDecimal price, LocalDateTime createDate, LocalDateTime changeDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -82,19 +81,19 @@ public class ItemList implements Serializable {
         this.price = price;
     }
 
-    public LocalDate getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDate createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
-    public LocalDate getChangeDate() {
+    public LocalDateTime getChangeDate() {
         return changeDate;
     }
 
-    public void setChangeDate(LocalDate changeDate) {
+    public void setChangeDate(LocalDateTime changeDate) {
         this.changeDate = changeDate;
     }
 

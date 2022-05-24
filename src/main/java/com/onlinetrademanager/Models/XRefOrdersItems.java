@@ -19,7 +19,6 @@ public class XRefOrdersItems {
     @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     private Order order;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     private Item item;
 

@@ -120,14 +120,17 @@ public class ClientsService {
             client.getCart().add(xRefClientsItems);
             item.getClientCarts().add(xRefClientsItems);
             xRefClientsItemsRepository.save(xRefClientsItems);
-
         } else {
             xRefClientsItems = xRefClientsItemsRepository.getByClientAndItem(client, item)
                     .orElseThrow(() -> new NotFoundException("Client: " + client.getId() + "'s card doesn't contain item with id: " + item.getId()));
 
-            client.getCart().remove(xRefClientsItems);
-            item.getClientCarts().remove(xRefClientsItems);
-            xRefClientsItemsRepository.delete(xRefClientsItems);
+            xRefClientsItems.setItemQuantity(xRefClientsItems.getItemQuantity() - 1);
+
+            if (xRefClientsItems.getItemQuantity() <= 0) {
+                client.getCart().remove(xRefClientsItems);
+                item.getClientCarts().remove(xRefClientsItems);
+                xRefClientsItemsRepository.delete(xRefClientsItems);
+            }
         }
 
         clientsRepository.save(client);

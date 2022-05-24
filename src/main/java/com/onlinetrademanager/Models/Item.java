@@ -13,6 +13,7 @@ import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -44,11 +45,11 @@ public class Item implements Serializable {
 
 //    @JsonFormat(pattern = "dd/MM/yyyy")
 //    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private final LocalDate createDate = LocalDate.now();
+    private final LocalDateTime createDate = LocalDateTime.now();
 
 //    @JsonFormat(pattern = "dd/MM/yyyy")
 //    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate changeDate;
+    private LocalDateTime changeDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Nullable
@@ -62,14 +63,10 @@ public class Item implements Serializable {
     @JoinColumn(name = "item_id")
     private Set<Image> images = new HashSet<>();
 
-//    @ManyToMany
-//    @JsonIgnore
-//    private Set<Client> ClientCarts = new HashSet<>();
-
     @OneToMany
     private Set<XRefClientsItems> clientCarts = new HashSet<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "item")
     private Set<XRefOrdersItems> orders = new HashSet<>();
 
 
@@ -140,7 +137,7 @@ public class Item implements Serializable {
         this.price = itemPrice;
     }
 
-    public LocalDate getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
@@ -148,11 +145,11 @@ public class Item implements Serializable {
 //        this.createDate = itemCreateDate;
 //    }
 
-    public LocalDate getChangeDate() {
+    public LocalDateTime getChangeDate() {
         return changeDate;
     }
 
-    public void setChangeDate(LocalDate itemChangeDate) {
+    public void setChangeDate(LocalDateTime itemChangeDate) {
         this.changeDate = itemChangeDate;
     }
 
