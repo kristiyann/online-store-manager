@@ -1,11 +1,10 @@
 package com.onlinetrademanager.Services;
 
 import com.onlinetrademanager.Exceptions.ImageNotFoundException;
-import com.onlinetrademanager.Exceptions.ItemNotFoundException;
 import com.onlinetrademanager.Models.Image;
 import com.onlinetrademanager.Models.Item;
 import com.onlinetrademanager.Repositories.ImageRepository;
-import com.onlinetrademanager.Repositories.ItemRepository;
+import com.onlinetrademanager.Repositories.ItemsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +17,12 @@ import java.util.UUID;
 public class ImageService {
 
     public final ImageRepository imageRepository;
-    public final ItemRepository itemRepository;
+    public final ItemsRepository itemsRepository;
 
     @Autowired
-    public ImageService(ImageRepository imageRepository, ItemRepository itemRepository){
+    public ImageService(ImageRepository imageRepository, ItemsRepository itemsRepository){
         this.imageRepository = imageRepository;
-        this.itemRepository = itemRepository;
+        this.itemsRepository = itemsRepository;
     }
 
     public Image insertImage(Image image){
@@ -51,7 +50,7 @@ public class ImageService {
     }
 
     public List<Image> findAllImagesByItem(UUID id){
-        Item item = itemRepository.getById(id);
+        Item item = itemsRepository.getById(id);
         List<Image> imageList = imageRepository.findAllImagesByItem(item);
         return imageList;
     }

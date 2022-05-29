@@ -1,6 +1,5 @@
 package com.onlinetrademanager.Repositories;
 
-import com.onlinetrademanager.DataTransferObjects.Clients.ClientList;
 import com.onlinetrademanager.Models.Users.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 

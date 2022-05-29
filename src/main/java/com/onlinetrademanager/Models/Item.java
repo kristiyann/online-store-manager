@@ -1,16 +1,19 @@
 package com.onlinetrademanager.Models;
-import com.fasterxml.jackson.annotation.*;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -29,115 +32,123 @@ public class Item implements Serializable {
     private UUID id;
 
     @NotNull
-    private String itemTitle;
+    private String title;
 
     @NotNull
-    private String itemDescription;
+    private String description;
 
     @NotNull
     @Enumerated
-    private ItemCategory itemCategory;
+    private ItemCategory category;
 
     @NotNull
     @Positive
-    private BigDecimal itemPrice;
+    private BigDecimal price;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate itemCreateDate;
+//    @JsonFormat(pattern = "dd/MM/yyyy")
+//    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private final LocalDateTime createDate = LocalDateTime.now();
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate itemChangeDate;
+//    @JsonFormat(pattern = "dd/MM/yyyy")
+//    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDateTime changeDate;
 
-    // one to one
-    @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Nullable
     private Sale sale;
 
-    // one to one
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Store store;
+
+    @OneToMany
+    @JoinColumn(name = "item_id")
+    private Set<Image> images = new HashSet<>();
+
+    @OneToMany
+    private Set<XRefClientsItems> clientCarts = new HashSet<>();
+
+    @OneToMany(mappedBy = "item")
+    private Set<XRefOrdersItems> orders = new HashSet<>();
 
 
     public Item() {
     }
 
     public Item(Item item){
-        setItemTitle(item.getItemTitle());
-        setItemDescription(item.getItemDescription());
-        setItemCategory(item.getItemCategory());
-        setItemPrice(item.getItemPrice());
+        setTitle(item.getTitle());
+        setDescription(item.getDescription());
+        setCategory(item.getCategory());
+        setPrice(item.getPrice());
         setStore(item.getStore());
         setSale(item.getSale());
-        setItemCreateDate(item.getItemCreateDate());
-        setItemChangeDate(item.getItemChangeDate());
+        // setCreateDate(item.getCreateDate());
+        setChangeDate(item.getChangeDate());
     }
 
-    public Item(String itemTitle, String itemDescription, ItemCategory itemCategory,
+    public Item(String title, String description, ItemCategory itemCategory,
                 BigDecimal itemPrice, Store store, Sale sale){
         // confirm how sale will be used when creating prods
         // independent sales, which will be assigned to items
-        setItemTitle(itemTitle);
-        setItemDescription(itemDescription);
-        setItemCategory(itemCategory);
-        setItemPrice(itemPrice);
-        setItemCreateDate(LocalDate.now());
+        setTitle(title);
+        setDescription(description);
+        setCategory(itemCategory);
+        setPrice(itemPrice);
+        // setCreateDate(LocalDate.now());
         setStore(store);
         setSale(sale);
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public String getItemTitle() {
-        return itemTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setItemTitle(String itemTitle) {
-        this.itemTitle = itemTitle;
+    public void setTitle(String itemTitle) {
+        this.title = itemTitle;
     }
 
-    public String getItemDescription() {
-        return itemDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
+    public void setDescription(String itemDescription) {
+        this.description = itemDescription;
     }
 
-    public ItemCategory getItemCategory() {
-        return itemCategory;
+    public ItemCategory getCategory() {
+        return category;
     }
 
-    public void setItemCategory(ItemCategory itemCategory) {
-        this.itemCategory = itemCategory;
+    public void setCategory(ItemCategory itemCategory) {
+        this.category = itemCategory;
     }
 
-    public BigDecimal getItemPrice() {
-        return itemPrice;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setItemPrice(BigDecimal itemPrice) {
-        this.itemPrice = itemPrice;
+    public void setPrice(BigDecimal itemPrice) {
+        this.price = itemPrice;
     }
 
-    public LocalDate getItemCreateDate() {
-        return itemCreateDate;
+    public LocalDateTime getCreateDate() {
+        return createDate;
     }
 
-    public void setItemCreateDate(LocalDate itemCreateDate) {
-        this.itemCreateDate = itemCreateDate;
+    public LocalDateTime getChangeDate() {
+        return changeDate;
     }
 
-    public LocalDate getItemChangeDate() {
-        return itemChangeDate;
-    }
-
-    public void setItemChangeDate(LocalDate itemChangeDate) {
-        this.itemChangeDate = itemChangeDate;
+    public void setChangeDate(LocalDateTime itemChangeDate) {
+        this.changeDate = itemChangeDate;
     }
 
     public Sale getSale() {
@@ -156,18 +167,43 @@ public class Item implements Serializable {
         this.store = store;
     }
 
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
+    }
+
+    public Set<XRefClientsItems> getClientCarts() {
+        return clientCarts;
+    }
+
+    public void setClientCarts(Set<XRefClientsItems> clientCarts) {
+        this.clientCarts = clientCarts;
+    }
+
+    public Set<XRefOrdersItems> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<XRefOrdersItems> orders) {
+        this.orders = orders;
+    }
+
     @Override
     public String toString() {
+        assert getSale() != null;
         return "Item[ " + getId() + " ]: " +
-                "Title: " + getItemTitle() +
-                "Description: " + getItemDescription() +
-                "Category: " + getItemCategory() +
-                "Price: " + getItemPrice() +
-                "CreationDate: " + getItemCreateDate() +
-                "ChangeDate: " + getItemChangeDate() +
+                "Title: " + getTitle() +
+                "Description: " + getDescription() +
+                "Category: " + getCategory() +
+                "Price: " + getPrice() +
+                "CreationDate: " + getCreateDate() +
+                "ChangeDate: " + getChangeDate() +
                 "ID Sale: " + getSale().toString() +
                 "ID Store: " + getStore().toString() +
-                "Title: " + getItemTitle();
+                "Title: " + getTitle();
 
     }
 }

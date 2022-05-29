@@ -1,6 +1,5 @@
 package com.onlinetrademanager.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -27,11 +26,6 @@ public class DeliveryCompany implements Serializable {
 
     @NotNull
     private BigDecimal deliveryFee;
-
-    /** Relations **/
-
-    // @JsonIgnore
-    // private HashSet<Order> orders;
 
 
     public DeliveryCompany() {

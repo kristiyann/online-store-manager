@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 
-// For some reason using this DTO to return objects only gives us the expiry date field. For now we will keep using the DbObj.
+// For some reason using this DTO to return objects only gives us the expiry date field. For now, we will keep using the DbObj.
 
 public class BankAccountList implements Serializable {
     private UUID id;

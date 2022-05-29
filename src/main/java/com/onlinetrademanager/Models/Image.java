@@ -25,7 +25,7 @@ public class Image implements Serializable {
     private UUID id;
 
     @NotNull
-    private String imageURL;
+    private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Item item;
@@ -36,12 +36,12 @@ public class Image implements Serializable {
 
     public Image(Image image){
         setId(image.getId());
-        setImageURL(image.getImageURL());
+        setUrl(image.getUrl());
         setItem(image.getItem());
     }
 
-    public Image(String imageURL, Item item){
-        setImageURL(imageURL);
+    public Image(String Url, Item item){
+        setUrl(Url);
         setItem(item);
     }
 
@@ -53,12 +53,12 @@ public class Image implements Serializable {
         this.id = id;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getUrl() {
+        return url;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setUrl(String imageURL) {
+        this.url = imageURL;
     }
 
     public Item getItem() {
@@ -67,5 +67,14 @@ public class Image implements Serializable {
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    @Override
+    public String toString() {
+        return "Image{" +
+                "id=" + id +
+                ", Url='" + url + '\'' +
+                ", itemId=" + item.getId() +
+                '}';
     }
 }

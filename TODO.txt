@@ -1,74 +1,20 @@
 User:
-
 Client:
--bank accounts[bank account]
 -cart[item]
 -purchaseHistory[order]
 
 update user + client (Go over again when we have the relations ready) +Update with BankAcc works
 
-BankAccount:
-
-delete, update (only client)
-
 Store:
--Id
--Address
--Items[item]
--UserId
--Active
-
-insert, update, getList(UserId), getList(), getById, changeActive
-
-Image:
--Id
--URL: string
--ItemId
+getList(UserId), getList(), getById
 
 Item:
--Id
--Title
--Images: Image
--Description
--Category
-Vehicles
-SportAndHobby
-Clothes
-Pets
-Electronics
-Games
-Antiques
-Other
--Price: BigDecimal !!!
--CreateDate
--ChangeDate
--Sale: Sale
--StoreId
-
 ItemList: (filters)?
--Id
--Title
--Images: [Image]
--Description
--Category
--Price: BigDecimal
--PriceWithSale?
--CreateDate
--ChangeDate
--StoreId
 
-insert, getList(), getList(storeId), getList(category) WITH PAGINATION, delete, update
+getList(storeId), getList(category) WITH PAGINATION, delete // TODO merge into single filter?
 
 Sale:
--Id
--startDate
--EndDate
--Percent
--Item: Item
-
 getList(itemId), insert, update, delete
-
-DeliveryCompany:
 
 Order:
 -Id

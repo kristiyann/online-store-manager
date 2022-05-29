@@ -3,7 +3,6 @@ package com.onlinetrademanager.Services;
 import com.onlinetrademanager.DataTransferObjects.BaseUsers.UserAuth;
 import com.onlinetrademanager.Exceptions.NotFoundException;
 import com.onlinetrademanager.Models.Users.BaseUser;
-import com.onlinetrademanager.Models.Users.User;
 import com.onlinetrademanager.Repositories.BaseUsersRepository;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;

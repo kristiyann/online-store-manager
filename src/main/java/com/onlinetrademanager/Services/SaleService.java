@@ -1,6 +1,8 @@
 package com.onlinetrademanager.Services;
 
 
+import com.onlinetrademanager.DataTransferObjects.Sales.SaleEdit;
+import com.onlinetrademanager.DataTransferObjects.Sales.SaleList;
 import com.onlinetrademanager.Exceptions.ItemNotFoundException;
 import com.onlinetrademanager.Exceptions.SaleNotFoundException;
 import com.onlinetrademanager.Models.Item;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -24,13 +27,14 @@ public class SaleService {
         this.saleRepository = saleRepository;
     }
 
-    public Sale insertSale(Sale sale){
-        saleRepository.save(sale);
-        return sale;
+    public Sale insertSale(SaleEdit sale){
+        Sale insert = convertEditToDbObj(sale);
+        saleRepository.save(insert);
+        return insert;
     }
 
-    public Sale updateSale(Sale sale){
-        Sale saleUpd = new Sale(sale);
+    public Sale updateSale(SaleEdit sale){
+        Sale saleUpd = convertEditToDbObj(sale);
         saleRepository.save(saleUpd);
         return saleUpd;
     }
@@ -43,20 +47,45 @@ public class SaleService {
         saleRepository.deleteSaleById(id);
     }
 
-    public Sale findSaleById(UUID id){
-        return saleRepository.findSaleById(id).orElseThrow(
+    public SaleList findSaleById(UUID id){
+        return saleRepository.findSaleById(id)
+                .stream()
+                .map(this::convertDbObjToList)
+                .findFirst()
+                .orElseThrow(
                 () -> new SaleNotFoundException("Sale " + id + "not found!")
         );
     }
 
-    public Sale findSaleByItem(Item item){
-        return saleRepository.findSaleByItem(item).orElseThrow(
-                () -> new SaleNotFoundException("Item " + item.getId() + "does not have Sale object attached!")
-        );
+//    public Sale findSaleByItem(Item item){
+//        return saleRepository.findSaleByItem(item).orElseThrow(
+//                () -> new SaleNotFoundException("Item " + item.getId() + "does not have Sale object attached!")
+//        );
+//    }
+
+    public List<SaleList> findAllSales(){
+        return saleRepository.findAll()
+                .stream()
+                .map(this::convertDbObjToList)
+                .collect(Collectors.toList());
     }
 
-    public List<Sale> findAllSales(){
-        return saleRepository.findAll();
+    //#region Helper methods
+
+    private SaleList convertDbObjToList(Sale sale) {
+        SaleList saleList = new SaleList(sale.getId(), sale.getStartDate(), sale.getEndDate(), sale.getSalePercentage());
+        return saleList;
+    }
+
+    private Sale convertEditToDbObj(SaleEdit saleEdit) {
+        Sale sale = new Sale();
+
+        sale.setSalePercentage(saleEdit.getSalePercentage());
+        sale.setEndDate(saleEdit.getEndDate());
+        sale.setId(saleEdit.getId());
+        sale.setStartDate(saleEdit.getStartDate());
+
+        return sale;
     }
 
 }

@@ -1,6 +1,8 @@
 package com.onlinetrademanager.Models.Users;
 
 import com.onlinetrademanager.Models.BankAccount;
+import com.onlinetrademanager.Models.Order;
+import com.onlinetrademanager.Models.XRefClientsItems;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,8 +17,11 @@ public class Client extends BaseUser implements Serializable {
     @OneToMany(mappedBy = "client", orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<BankAccount> bankAccounts = new HashSet<>();
 
-    // private Set<Item> cart;
-    // private Set<Order> purchaseHistory;
+    @OneToMany
+    private Set<XRefClientsItems> cart = new HashSet<>();
+
+    @OneToMany
+    private Set<Order> orders;
 
     public Client() {
     }
@@ -33,13 +38,28 @@ public class Client extends BaseUser implements Serializable {
         return bankAccounts;
     }
 
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Set<XRefClientsItems> getCart() {
+        return cart;
+    }
+
+    public void setCart(Set<XRefClientsItems> cart) {
+        this.cart = cart;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
                 "id=" + getId() +
                 ", username='" + getUsername() + '\'' +
                 ", email='" + getEmail() + '\'' +
-                ", password='" + getPassword() + '\'' +
                 '}';
     }
 }

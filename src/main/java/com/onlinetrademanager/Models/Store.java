@@ -1,6 +1,7 @@
 package com.onlinetrademanager.Models;
 
 
+import com.onlinetrademanager.Models.Users.User;
 import jdk.jfr.BooleanFlag;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -13,7 +14,6 @@ import java.util.UUID;
 
 @Entity
 public class Store {
-
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
@@ -25,22 +25,27 @@ public class Store {
     private String address;
 
     @BooleanFlag
-    private boolean storeActive;
+    private boolean active = true;
 
+    @ManyToOne
+    @NotNull
+    private User user;
+
+    @OneToMany
+    private Set<Item> items = new HashSet<>();
 
     public Store(){
-        setAddress("Test Address");
-        setStoreActive(true);
+        setActive(true);
     }
 
     public Store(Store store){
         setAddress(store.getAddress());
-        setStoreActive(store.getStoreActive());
+        setActive(store.getActive());
     }
 
     public Store(String address, boolean storeActive, Set<Item> items){
         setAddress(address);
-        setStoreActive(storeActive);
+        setActive(storeActive);
     }
 
     public UUID getId() {
@@ -59,12 +64,19 @@ public class Store {
         this.address = address;
     }
 
-    public boolean getStoreActive() {
-        return storeActive;
+    public boolean getActive() {
+        return active;
     }
 
-    public void setStoreActive(boolean storeActive) {
-        this.storeActive = storeActive;
+    public void setActive(boolean storeActive) {
+        this.active = storeActive;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

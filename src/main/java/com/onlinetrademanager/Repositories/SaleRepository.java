@@ -12,7 +12,7 @@ public interface SaleRepository extends JpaRepository<Sale, UUID> {
 
     void deleteSaleById(UUID id);
 
-    Optional<Sale> findSaleByItem(Item item);
+    // Optional<Sale> findSaleByItem(Item item);
 
 
 }

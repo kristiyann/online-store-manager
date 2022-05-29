@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface StoreRepository extends JpaRepository<Store, UUID> {
+public interface StoresRepository extends JpaRepository<Store, UUID> {
     Optional<Store> findStoreById(UUID id);
 
     void deleteStoreById(UUID id);
 
+    List<Store> findAllStoresByUser(User user);
 }

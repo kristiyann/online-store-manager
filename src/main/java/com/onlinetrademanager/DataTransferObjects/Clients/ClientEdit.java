@@ -8,14 +8,17 @@ import java.util.UUID;
 
 public class ClientEdit implements Serializable {
     private UUID id;
+
     @NotNull
     @Size(min = 3)
     private String username;
+
     @NotNull
     @Email
     private String email;
 
     private String password;
+
     @NotNull
     private boolean active = true;
 
