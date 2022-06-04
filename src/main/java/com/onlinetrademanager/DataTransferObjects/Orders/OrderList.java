@@ -1,9 +1,8 @@
 package com.onlinetrademanager.DataTransferObjects.Orders;
 
+import com.onlinetrademanager.DataTransferObjects.GenericComboBox;
 import com.onlinetrademanager.DataTransferObjects.XRefs.XRefOrdersItemsList;
 import com.onlinetrademanager.Enums.Order.OrderStatus;
-import com.onlinetrademanager.Models.XRefOrdersItems;
-import org.apache.tomcat.jni.Local;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -23,8 +22,9 @@ public class OrderList implements Serializable {
     private LocalDate changeDate;
     private LocalDate createDate;
 
-    private UUID deliveryCompanyId;
+    private GenericComboBox deliveryCompany;
     private UUID userId;
+    private String deliveryAddress;
 
     private Set<XRefOrdersItemsList> items = new HashSet<>();
 
@@ -61,8 +61,8 @@ public class OrderList implements Serializable {
         this.createDate = createDate;
     }
 
-    public void setDeliveryCompanyId(UUID deliveryCompanyId) {
-        this.deliveryCompanyId = deliveryCompanyId;
+    public void setDeliveryCompany(GenericComboBox deliveryCompany) {
+        this.deliveryCompany = deliveryCompany;
     }
 
     public void setUserId(UUID userId) {
@@ -73,8 +73,8 @@ public class OrderList implements Serializable {
         return userId;
     }
 
-    public UUID getDeliveryCompanyId() {
-        return deliveryCompanyId;
+    public GenericComboBox getDeliveryCompany() {
+        return deliveryCompany;
     }
 
     public void setId(UUID id) {
@@ -99,6 +99,14 @@ public class OrderList implements Serializable {
 
     public void setItems(Set<XRefOrdersItemsList> items) {
         this.items = items;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 
     @Override

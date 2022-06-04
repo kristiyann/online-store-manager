@@ -19,6 +19,8 @@ public class OrderInsert implements Serializable {
 
     private UUID userId;
 
+    private String deliveryAddress;
+
     public OrderInsert(UUID id) {
         this.id = id;
     }
@@ -58,6 +60,13 @@ public class OrderInsert implements Serializable {
         this.itemIds = itemIds;
     }
 
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
 
     @Override
     public int hashCode() {

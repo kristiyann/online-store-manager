@@ -1,5 +1,6 @@
 package com.onlinetrademanager.Services;
 
+import com.onlinetrademanager.DataTransferObjects.GenericComboBox;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemEdit;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
@@ -189,8 +190,12 @@ public class ItemsService {
         itemList.setCreateDate(item.getCreateDate());
         itemList.setDescription(item.getDescription());
         itemList.setTitle(item.getTitle());
-        itemList.setStoreId(item.getStore().getId());
         itemList.setOriginalPrice(item.getPrice());
+
+        GenericComboBox store = new GenericComboBox();
+        store.setValue(item.getStore().getId());
+        store.setText(item.getStore().getName());
+        itemList.setStore(store);
 
         List<String> imageUrls = new ArrayList<>();
         for (Image image : item.getImages()) {

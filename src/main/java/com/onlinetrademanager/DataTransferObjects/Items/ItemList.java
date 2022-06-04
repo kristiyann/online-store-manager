@@ -1,5 +1,6 @@
 package com.onlinetrademanager.DataTransferObjects.Items;
 
+import com.onlinetrademanager.DataTransferObjects.GenericComboBox;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
 
 import javax.validation.constraints.NotNull;
@@ -26,7 +27,7 @@ public class ItemList implements Serializable {
     private LocalDateTime createDate;
     private LocalDateTime changeDate;
     private List<String> images = new ArrayList<>();
-    private UUID storeId;
+    private GenericComboBox store;
 
     public ItemList() {
     }
@@ -97,16 +98,16 @@ public class ItemList implements Serializable {
         this.changeDate = changeDate;
     }
 
-    public void setStoreId(UUID storeId) {
-        this.storeId = storeId;
+    public void setStore(GenericComboBox store) {
+        this.store = store;
     }
 
     public void setImages(List<String> images) {
         this.images = images;
     }
 
-    public UUID getStoreId() {
-        return storeId;
+    public GenericComboBox getStore() {
+        return store;
     }
 
     public List<String> getImages() {

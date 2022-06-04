@@ -24,8 +24,8 @@ public class Order {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
-    @NotNull
-    private BigDecimal totalPrice;
+//    @NotNull
+//    private BigDecimal totalPrice;
 
     @NotNull
     @Enumerated
@@ -50,6 +50,8 @@ public class Order {
 //    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 //    private Store store;
 
+    private String deliveryAddress;
+
     @OneToMany(mappedBy = "order")
     private Set<XRefOrdersItems> items = new HashSet<>();
 
@@ -60,7 +62,7 @@ public class Order {
 //                 Store store,
                  Set<XRefOrdersItems> items) {
         this.id = id;
-        this.totalPrice = totalPrice;
+//        this.totalPrice = totalPrice;
         this.status = status;
         this.changeDate = changeDate;
         this.deliveryCompany = deliveryCompany;
@@ -77,13 +79,13 @@ public class Order {
         this.id = id;
     }
 
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
+//    public BigDecimal getTotalPrice() {
+//        return totalPrice;
+//    }
+//
+//    public void setTotalPrice(BigDecimal totalPrice) {
+//        this.totalPrice = totalPrice;
+//    }
 
     public OrderStatus getStatus() {
         return status;
@@ -139,5 +141,13 @@ public class Order {
 
     public void setItems(Set<XRefOrdersItems> items) {
         this.items = items;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 }
