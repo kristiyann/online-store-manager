@@ -1,7 +1,7 @@
 package com.onlinetrademanager.Services;
 
 import com.onlinetrademanager.DataTransferObjects.BatchChangeModel;
-import com.onlinetrademanager.DataTransferObjects.Orders.OrderCustomFilter;
+import com.onlinetrademanager.DataTransferObjects.GenericComboBox;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderEdit;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderInsert;
 import com.onlinetrademanager.DataTransferObjects.Orders.OrderList;
@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -65,8 +66,6 @@ public class OrdersService {
         Order orderUpd = convertEditToDbObj(orderEdit);
 
         ordersRepository.save(orderUpd);
-
-        // this.addItemsToOrder(orderUpd.getId(), orderEdit.getItemIds());
 
         return convertDbObjToList(orderUpd);
     }
@@ -169,7 +168,7 @@ public class OrdersService {
             Item item = itemsRepository.findItemById(itemId)
                     .orElseThrow(() -> new NotFoundException("Item " + itemId + "not found!"));
 
-            order.setTotalPrice(order.getTotalPrice().add(item.getPrice()));
+            // order.setTotalPrice(order.getTotalPrice().add(item.getPrice()));
 
             xRefOrdersItems = xRefOrdersItemsRepository.getByOrderAndItem(order, item)
                     .orElse(null);
@@ -209,7 +208,8 @@ public class OrdersService {
         order.setStatus(OrderStatus.CREATED);
         order.setItems(new HashSet<>());
         order.setClient(client);
-        order.setTotalPrice(deliveryCompany.getDeliveryFee());
+        // order.setTotalPrice(deliveryCompany.getDeliveryFee());
+        order.setDeliveryAddress(orderInsert.getDeliveryAddress());
         // order.setStore(items.get(1).getStore());
 
         return order;
@@ -219,12 +219,17 @@ public class OrdersService {
         OrderList orderList = new OrderList();
 
         orderList.setId(order.getId());
+        orderList.setDeliveryAddress(order.getDeliveryAddress());
         orderList.setCreateDate(order.getCreateDate());
         orderList.setStatus(order.getStatus());
         orderList.setChangeDate(order.getChangeDate());
-        orderList.setTotalPrice(order.getTotalPrice());
+        orderList.setTotalPrice(order.getDeliveryCompany().getDeliveryFee());
         orderList.setUserId(order.getClient().getId());
-        orderList.setDeliveryCompanyId(order.getDeliveryCompany().getId());
+
+        GenericComboBox deliveryCompany = new GenericComboBox();
+        deliveryCompany.setText(order.getDeliveryCompany().getName());
+        deliveryCompany.setValue(order.getDeliveryCompany().getId());
+        orderList.setDeliveryCompany(deliveryCompany);
 
         Set<XRefOrdersItemsList> xRefCollection = new HashSet<>();
         for (XRefOrdersItems xRefOrdersItems : order.getItems()) {
@@ -233,10 +238,16 @@ public class OrdersService {
             xRefOrdersItemsList.setItemId(xRefOrdersItems.getItem().getId());
             xRefOrdersItemsList.setxRefId(xRefOrdersItems.getId());
             xRefOrdersItemsList.setItemQuantity(xRefOrdersItems.getItemQuantity());
+            xRefOrdersItemsList.setName(xRefOrdersItems.getItem().getTitle());
+            xRefOrdersItemsList.setPrice(xRefOrdersItems.getItem().getPrice());
+            if (xRefOrdersItems.getItem().getImages() != null && !xRefOrdersItems.getItem().getImages().isEmpty()) {
+                xRefOrdersItemsList.setFirstImgUrl(xRefOrdersItems.getItem().getImages().iterator().next().getUrl());
+            }
 
             xRefCollection.add(xRefOrdersItemsList);
-        }
 
+            orderList.setTotalPrice(orderList.getTotalPrice().add(xRefOrdersItems.getItem().getPrice().multiply(BigDecimal.valueOf(xRefOrdersItems.getItemQuantity()))));
+        }
         orderList.setItems(xRefCollection);
 
         return orderList;
@@ -253,6 +264,7 @@ public class OrdersService {
         order.setChangeDate(LocalDate.now());
         order.setDeliveryCompany(deliveryCompany);
         order.setChangeDate(LocalDate.now());
+        order.setDeliveryAddress(orderEdit.getDeliveryAddress());
 
         // order.setItems(new HashSet<>());
 
@@ -260,16 +272,6 @@ public class OrdersService {
     }
 
     private List<Order> applyCustomFilter(List<Order> query, OrderStatus customFilter) {
-//        if (customFilter != null) {
-//            if (customFilter.getStatus() != null) {
-//                query = query.stream()
-//                        .filter(order ->
-//                                order.getStatus().equals(customFilter.getStatus())
-//                        )
-//                        .collect(Collectors.toList());
-//            }
-//        }
-
         if (customFilter != null) {
             query = query.stream()
                         .filter(order -> order.getStatus().equals(customFilter))

@@ -13,6 +13,8 @@ public class OrderEdit implements Serializable {
     @NotNull
     private OrderStatus status;
 
+    private String deliveryAddress;
+
     // private List<UUID> itemIds;
 
     private UUID deliveryCompanyId;
@@ -52,6 +54,14 @@ public class OrderEdit implements Serializable {
 
     public UUID getDeliveryCompanyId() {
         return deliveryCompanyId;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 
     @Override
