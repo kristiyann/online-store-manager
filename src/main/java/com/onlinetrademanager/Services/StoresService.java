@@ -53,13 +53,12 @@ public class StoresService {
                 .stream()
                 .map(this::convertDbObjToList)
                 .findFirst()
-                .orElseThrow(()
-                -> new StoreNotFoundException("Store " + id + "not found!"));
+                .orElseThrow(() -> new StoreNotFoundException("Store " + id + "not found!"));
     }
 
     public List<StoreList> findAllStoresByUser(UUID userId){
-        User user = usersRepository.findUserById(userId).orElseThrow(()
-                -> new UserNotFoundException("User " + userId + "not found!"));
+        User user = usersRepository.findUserById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User " + userId + "not found!"));
 
         return storesRepository.findAllStoresByUser(user)
                 .stream()

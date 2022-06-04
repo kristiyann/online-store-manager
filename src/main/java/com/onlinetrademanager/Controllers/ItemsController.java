@@ -2,13 +2,15 @@ package com.onlinetrademanager.Controllers;
 
 import com.onlinetrademanager.DataTransferObjects.Items.ItemEdit;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
-import com.onlinetrademanager.DataTransferObjects.Stores.StoreEdit;
-import com.onlinetrademanager.Models.Item;
+import com.onlinetrademanager.Enums.Item.ItemCategory;
+import com.onlinetrademanager.Enums.SortColumn;
+import com.onlinetrademanager.Enums.SortOrder;
 import com.onlinetrademanager.Services.ItemsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,14 +32,29 @@ public class ItemsController {
     }
 
     @GetMapping("/All")
-    public ResponseEntity<List<ItemList>> getAllItems(Integer skip, Integer top) {
-        List<ItemList> items = itemsService.findAllItems(skip, top);
+    public ResponseEntity<List<ItemList>> getAllItems(Integer skip,
+                                                      Integer top,
+                                                      String searchKeyword,
+                                                      BigDecimal priceFrom,
+                                                      BigDecimal priceTo,
+                                                      ItemCategory category,
+                                                      SortOrder sortOrder,
+                                                      SortColumn sortColumn) {
+        List<ItemList> items = itemsService.findAllItems(skip, top, searchKeyword, priceFrom, priceTo, category, sortOrder, sortColumn);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
     @GetMapping("/Store")
-    public ResponseEntity<List<ItemList>> getAllItemsByStore(@RequestParam UUID storeId, Integer skip, Integer top) {
-        List<ItemList> items = itemsService.findAllItemsByStore(storeId, skip, top);
+    public ResponseEntity<List<ItemList>> getAllItemsByStore(@RequestParam UUID storeId,
+                                                             Integer skip,
+                                                             Integer top,
+                                                             String searchKeyword,
+                                                             BigDecimal priceFrom,
+                                                             BigDecimal priceTo,
+                                                             ItemCategory category,
+                                                             SortOrder sortOrder,
+                                                             SortColumn sortColumn) {
+        List<ItemList> items = itemsService.findAllItemsByStore(storeId, skip, top, searchKeyword, priceFrom, priceTo, category, sortOrder, sortColumn);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 

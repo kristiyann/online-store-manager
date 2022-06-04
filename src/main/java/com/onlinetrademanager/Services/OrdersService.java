@@ -272,9 +272,7 @@ public class OrdersService {
 
         if (customFilter != null) {
             query = query.stream()
-                        .filter(order ->
-                                order.getStatus().equals(customFilter)
-                        )
+                        .filter(order -> order.getStatus().equals(customFilter))
                         .collect(Collectors.toList());
         }
 

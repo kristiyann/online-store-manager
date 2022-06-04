@@ -2,12 +2,12 @@ package com.onlinetrademanager.Services;
 
 import com.onlinetrademanager.DataTransferObjects.Items.ItemEdit;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
+import com.onlinetrademanager.Enums.Item.ItemCategory;
+import com.onlinetrademanager.Enums.SortColumn;
+import com.onlinetrademanager.Enums.SortOrder;
 import com.onlinetrademanager.Exceptions.ItemNotFoundException;
 import com.onlinetrademanager.Exceptions.StoreNotFoundException;
-import com.onlinetrademanager.Models.Image;
-import com.onlinetrademanager.Models.Item;
-import com.onlinetrademanager.Models.Sale;
-import com.onlinetrademanager.Models.Store;
+import com.onlinetrademanager.Models.*;
 import com.onlinetrademanager.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -27,18 +28,24 @@ public class ItemsService {
     public final SaleRepository saleRepository;
     public final ImageRepository imageRepository;
     public final ClientsRepository clientsRepository;
+    public final XRefOrdersItemsRepository xRefOrdersItemsRepository;
+    public final XRefClientsItemsRepository xRefClientsItemsRepository;
 
     @Autowired
     public ItemsService(ItemsRepository itemsRepository,
                         StoresRepository storesRepository,
                         SaleRepository saleRepository,
                         ImageRepository imageRepository,
-                        ClientsRepository clientsRepository){
+                        ClientsRepository clientsRepository,
+                        XRefOrdersItemsRepository xRefOrdersItemsRepository,
+                        XRefClientsItemsRepository xRefClientsItemsRepository){
         this.itemsRepository = itemsRepository;
         this.storesRepository = storesRepository;
         this.saleRepository = saleRepository;
         this.imageRepository = imageRepository;
         this.clientsRepository = clientsRepository;
+        this.xRefOrdersItemsRepository = xRefOrdersItemsRepository;
+        this.xRefClientsItemsRepository = xRefClientsItemsRepository;
     }
 
     public UUID insertItem(ItemEdit item){
@@ -73,7 +80,22 @@ public class ItemsService {
     }
 
     public void deleteItemById(UUID id){
-        itemsRepository.deleteItemById(id);
+        Item toDelete = itemsRepository.findItemById(id)
+                .orElseThrow(() -> new ItemNotFoundException("Item " + id + "not found!"));
+
+        if (toDelete.getImages() != null  && !toDelete.getImages().isEmpty()) {
+            List<Image> images = imageRepository.findAllImagesByItem(toDelete).stream().toList();
+            imageRepository.deleteAll(images);
+        }
+        if (toDelete.getOrders() != null  && !toDelete.getOrders().isEmpty()) {
+            xRefOrdersItemsRepository.deleteAll(toDelete.getOrders());
+        }
+        if (toDelete.getClientCarts() != null  && !toDelete.getClientCarts().isEmpty()) {
+            xRefClientsItemsRepository.deleteAll(toDelete.getClientCarts());
+        }
+        // itemsRepository.deleteItemById(id);
+
+        itemsRepository.delete(toDelete);
     }
 
     public ItemList findItemById(UUID id){
@@ -81,12 +103,22 @@ public class ItemsService {
                 .stream()
                 .map(this::convertDbObjToList)
                 .findFirst()
-                .orElseThrow(()
-                -> new ItemNotFoundException("Item " + id + "not found!"));
+                .orElseThrow(() -> new ItemNotFoundException("Item " + id + "not found!"));
     }
 
-    public List<ItemList> findAllItems(Integer skip, Integer top){
+    public List<ItemList> findAllItems(Integer skip,
+                                       Integer top,
+                                       String searchKeyword,
+                                       BigDecimal priceFrom,
+                                       BigDecimal priceTo,
+                                       ItemCategory category,
+                                       SortOrder sortOrder,
+                                       SortColumn sortColumn){
         List<Item> query = itemsRepository.findAll();
+
+        query = applyFiltering(query, searchKeyword, priceFrom, priceTo, category);
+
+        query = applySorting(query, sortOrder, sortColumn);
 
         query = applyPagination(query, skip, top);
 
@@ -95,11 +127,23 @@ public class ItemsService {
                 .collect(Collectors.toList());
     }
 
-    public List<ItemList> findAllItemsByStore(UUID storeId, Integer skip, Integer top) {
+    public List<ItemList> findAllItemsByStore(UUID storeId,
+                                              Integer skip,
+                                              Integer top,
+                                              String searchKeyword,
+                                              BigDecimal priceFrom,
+                                              BigDecimal priceTo,
+                                              ItemCategory category,
+                                              SortOrder sortOrder,
+                                              SortColumn sortColumn) {
         Store store = storesRepository.findStoreById(storeId).orElseThrow(()
                 -> new ItemNotFoundException("Store " + storeId + "not found!"));
 
         List<Item> query =  itemsRepository.findAllImagesByStore(store);
+
+        query = applyFiltering(query, searchKeyword, priceFrom, priceTo, category);
+
+        query = applySorting(query, sortOrder, sortColumn);
 
         query = applyPagination(query, skip, top);
 
@@ -182,5 +226,47 @@ public class ItemsService {
         }
 
         return query;
+    }
+
+    public static List<Item> applyFiltering(List<Item> query, String searchKeyword, BigDecimal priceFrom, BigDecimal priceTo, ItemCategory category) {
+        Stream<Item> stream = query.stream();
+
+        if (searchKeyword != null) {
+            stream = stream.filter(item -> item.getTitle().contains(searchKeyword));
+        }
+
+        if (priceFrom != null) {
+            stream = stream.filter(item -> item.getPrice().compareTo(priceFrom) >= 0);
+        }
+
+        if (priceTo != null) {
+            stream = stream.filter(item -> item.getPrice().compareTo(priceTo) <= 0);
+        }
+
+        if (category != null) {
+            stream = stream.filter(item -> item.getCategory().equals(category));
+        }
+
+        return stream.collect(Collectors.toList());
+    }
+
+    public static List<Item> applySorting(List<Item> query, SortOrder sortOrder, SortColumn sortColumn) {
+        Stream<Item> stream = query.stream();
+
+        if (sortColumn != null) {
+            switch (sortColumn) {
+                case PRICE -> stream = stream.sorted((o1, o2) -> Integer.compare(o1.getPrice().compareTo(o2.getPrice()), 0));
+            }
+
+            if (sortOrder == SortOrder.DESC) {
+                List<Item> list = stream.collect(Collectors.toList());
+
+                Collections.reverse(list);
+
+                stream = list.stream();
+            }
+        }
+
+        return stream.collect(Collectors.toList());
     }
 }
