@@ -21,6 +21,8 @@ public class Store {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
+    private String name;
+
     @NotNull
     private String address;
 
@@ -78,5 +80,21 @@ public class Store {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Set<Item> getItems() {
+        return items;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setItems(Set<Item> items) {
+        this.items = items;
     }
 }

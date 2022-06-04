@@ -1,16 +1,11 @@
 package com.onlinetrademanager.DataTransferObjects.BankAccounts;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 public class BankAccountInsert {
     private String bankName;
 
-    private String cardNumber;
-
-    private String CVV;
-
-    private LocalDate expiryDate;
+    private String number;
 
     private UUID clientId;
 
@@ -21,16 +16,8 @@ public class BankAccountInsert {
         return bankName;
     }
 
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public String getCVV() {
-        return CVV;
-    }
-
-    public LocalDate getExpiryDate() {
-        return expiryDate;
+    public String getNumber() {
+        return number;
     }
 
     public UUID getClientId() {
@@ -41,16 +28,8 @@ public class BankAccountInsert {
         this.bankName = bankName;
     }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public void setCVV(String CVV) {
-        this.CVV = CVV;
-    }
-
-    public void setExpiryDate(LocalDate expiryDate) {
-        this.expiryDate = expiryDate;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public void setClientId(UUID clientId) {

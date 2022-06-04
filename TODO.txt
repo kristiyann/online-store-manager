@@ -3,31 +3,13 @@ Client:
 -cart[item]
 -purchaseHistory[order]
 
-update user + client (Go over again when we have the relations ready) +Update with BankAcc works
+update user (Go over again when we have the relations ready)
 
 Store:
 getList(UserId), getList(), getById
 
 Item:
-ItemList: (filters)?
-
 getList(storeId), getList(category) WITH PAGINATION, delete // TODO merge into single filter?
 
-Sale:
-getList(itemId), insert, update, delete
-
 Order:
--Id
--Items: [Item]
-// NumberOfItems - we get it from the ItemList
--TotalPrice: (can be double)
--Status
-Created
-Ready for Courier
-Waiting For Pickup
-Completed
--DeliveryCompany: DeliveryCompany
--CreateDate
--ChangeDate
-
-insert, getList(userId), getList(storeId), getList(), update
+getList(storeId) ?
