@@ -86,6 +86,7 @@ public class StoresService {
         store.setActive(editModel.getActive());
         store.setAddress(editModel.getAddress());
         store.setUser(user);
+        store.setName(editModel.getName());
 
         return store;
     }
@@ -97,6 +98,7 @@ public class StoresService {
         store.setActive(dbObj.getActive());
         store.setAddress(dbObj.getAddress());
         store.setUserId(dbObj.getUser().getId());
+        store.setName(dbObj.getName());
 
         return store;
     }

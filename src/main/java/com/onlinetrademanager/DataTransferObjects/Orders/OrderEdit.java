@@ -13,7 +13,7 @@ public class OrderEdit implements Serializable {
     @NotNull
     private OrderStatus status;
 
-    private List<UUID> itemIds;
+    // private List<UUID> itemIds;
 
     private UUID deliveryCompanyId;
 
@@ -38,12 +38,16 @@ public class OrderEdit implements Serializable {
         this.id = id;
     }
 
-    public List<UUID> getItemIds() {
-        return itemIds;
-    }
+//    public List<UUID> getItemIds() {
+//        return itemIds;
+//    }
+//
+//    public void setItemIds(List<UUID> itemIds) {
+//        this.itemIds = itemIds;
+//    }
 
-    public void setItemIds(List<UUID> itemIds) {
-        this.itemIds = itemIds;
+    public void setDeliveryCompanyId(UUID deliveryCompanyId) {
+        this.deliveryCompanyId = deliveryCompanyId;
     }
 
     public UUID getDeliveryCompanyId() {

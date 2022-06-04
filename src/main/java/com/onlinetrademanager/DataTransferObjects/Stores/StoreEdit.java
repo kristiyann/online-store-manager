@@ -8,6 +8,7 @@ public class StoreEdit implements Serializable {
     private UUID id;
     @NotNull
     private String address;
+    private String name;
     private boolean active = true;
     @NotNull
     private UUID userId;
@@ -51,5 +52,13 @@ public class StoreEdit implements Serializable {
 
     public UUID getUserId() {
         return userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

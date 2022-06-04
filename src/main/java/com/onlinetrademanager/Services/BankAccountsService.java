@@ -71,7 +71,7 @@ public class BankAccountsService {
         BankAccount bankAccount = new BankAccount();
 
         bankAccount.setBankName(bankAccountInsert.getBankName());
-        bankAccount.setNumber(bankAccountInsert.getCardNumber());
+        bankAccount.setNumber(bankAccountInsert.getNumber());
 //        bankAccount.setCVV(bankAccountInsert.getCVV());
 //        bankAccount.setExpiryDate(bankAccountInsert.getExpiryDate());
 

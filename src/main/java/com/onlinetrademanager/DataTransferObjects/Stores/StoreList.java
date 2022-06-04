@@ -6,6 +6,7 @@ import java.util.UUID;
 
 public class StoreList implements Serializable {
     private UUID id;
+    private String name;
     private String address;
     private boolean active = true;
     private UUID userId;
@@ -49,6 +50,14 @@ public class StoreList implements Serializable {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
