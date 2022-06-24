@@ -13,3 +13,7 @@ getList(storeId), getList(category) WITH PAGINATION, delete // TODO merge into s
 
 Order:
 getList(storeId) ?
+
+// TEST
+FrontPageFeed
+Item get by store

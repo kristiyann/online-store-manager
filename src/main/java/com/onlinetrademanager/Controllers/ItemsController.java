@@ -1,5 +1,6 @@
 package com.onlinetrademanager.Controllers;
 
+import com.onlinetrademanager.DataTransferObjects.Items.FrontPageFeed;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemEdit;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
@@ -29,6 +30,12 @@ public class ItemsController {
     public ResponseEntity<ItemList> getItem(@RequestParam UUID id) {
         ItemList item = itemsService.findItemById(id);
         return new ResponseEntity<>(item, HttpStatus.OK);
+    }
+
+    @GetMapping("/Feed")
+    public ResponseEntity<FrontPageFeed> getItem(Integer top) {
+        FrontPageFeed feed = itemsService.getFrontPageItemFeed(top);
+        return new ResponseEntity<>(feed, HttpStatus.OK);
     }
 
     @GetMapping("/All")

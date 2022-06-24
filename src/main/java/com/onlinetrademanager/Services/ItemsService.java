@@ -1,6 +1,7 @@
 package com.onlinetrademanager.Services;
 
 import com.onlinetrademanager.DataTransferObjects.GenericComboBox;
+import com.onlinetrademanager.DataTransferObjects.Items.FrontPageFeed;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemEdit;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
@@ -49,7 +50,7 @@ public class ItemsService {
         this.xRefClientsItemsRepository = xRefClientsItemsRepository;
     }
 
-    public UUID insertItem(ItemEdit item){
+    public UUID insertItem(ItemEdit item) {
         Item dbObj = convertEditToDbObj(item);
 
         // dbObj.setCreateDate(LocalDate.now());
@@ -71,6 +72,7 @@ public class ItemsService {
 
     public ItemList updateItem(ItemEdit item){
         Item itemUpd = convertEditToDbObj(item);
+        itemUpd.setChangeDate(LocalDateTime.now());
 
         itemsRepository.save(itemUpd);
         return convertDbObjToList(itemUpd);
@@ -140,7 +142,7 @@ public class ItemsService {
         Store store = storesRepository.findStoreById(storeId).orElseThrow(()
                 -> new ItemNotFoundException("Store " + storeId + "not found!"));
 
-        List<Item> query =  itemsRepository.findAllImagesByStore(store);
+        List<Item> query =  itemsRepository.findAllItemsByStore(store);
 
         query = applyFiltering(query, searchKeyword, priceFrom, priceTo, category);
 
@@ -151,6 +153,28 @@ public class ItemsService {
         return query.stream()
                 .map(this::convertDbObjToList)
                 .collect(Collectors.toList());
+    }
+
+    public FrontPageFeed getFrontPageItemFeed(Integer top) {
+        FrontPageFeed feed = new FrontPageFeed();
+
+        if (top == null || top == 0 || top > 50) {
+            top = 5;
+        }
+
+        List<Item> query = itemsRepository.findAll();
+        query = applySorting(query, SortOrder.DESC, SortColumn.CREATEDATE);
+
+        feed.setItemsVehicle(this.generateCategorisedList(query, top, ItemCategory.VEHICLES));
+        feed.setItemsAntiques(this.generateCategorisedList(query, top, ItemCategory.ANTIQUES));
+        feed.setItemsClothes(this.generateCategorisedList(query, top, ItemCategory.CLOTHES));
+        feed.setItemsGames(this.generateCategorisedList(query, top, ItemCategory.GAMES));
+        feed.setItemsOther(this.generateCategorisedList(query, top, ItemCategory.OTHER));
+        feed.setItemsElectronics(this.generateCategorisedList(query, top, ItemCategory.ELECTRONICS));
+        feed.setItemsSportHobby(this.generateCategorisedList(query, top, ItemCategory.SPORTANDHOBBY));
+        feed.setItemsPets(this.generateCategorisedList(query, top, ItemCategory.PETS));
+
+        return feed;
     }
 
     //#region Helper methods
@@ -171,7 +195,6 @@ public class ItemsService {
 
         item.setId(itemEdit.getId());
         item.setCategory(itemEdit.getCategory());
-        item.setChangeDate(LocalDateTime.now());
         item.setDescription(itemEdit.getDescription());
         item.setPrice(itemEdit.getPrice());
         item.setTitle(itemEdit.getTitle());
@@ -261,6 +284,7 @@ public class ItemsService {
         if (sortColumn != null) {
             switch (sortColumn) {
                 case PRICE -> stream = stream.sorted((o1, o2) -> Integer.compare(o1.getPrice().compareTo(o2.getPrice()), 0));
+                case CREATEDATE -> stream = stream.sorted(Comparator.comparing(Item::getCreateDate));
             }
 
             if (sortOrder == SortOrder.DESC) {
@@ -273,5 +297,15 @@ public class ItemsService {
         }
 
         return stream.collect(Collectors.toList());
+    }
+
+    private List<ItemList> generateCategorisedList(List<Item> query, Integer top, ItemCategory category) {
+        List<ItemList> categorisedList = query.stream()
+                .filter(item -> item.getCategory().equals(category))
+                .limit(top)
+                .map(this::convertDbObjToList)
+                .collect(Collectors.toList());
+
+        return categorisedList;
     }
 }
