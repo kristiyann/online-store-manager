@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -52,8 +53,8 @@ public class ItemsService {
 
     public UUID insertItem(ItemEdit item) {
         Item dbObj = convertEditToDbObj(item);
-
-        // dbObj.setCreateDate(LocalDate.now());
+        dbObj.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        dbObj.setChangeDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
         Set<Image> images = new HashSet<>();
         for (String url : item.getImageUrls()) {
@@ -70,14 +71,14 @@ public class ItemsService {
         return dbObj.getId();
     }
 
-    public ItemList updateItem(ItemEdit item){
-        Item itemUpd = convertEditToDbObj(item);
-        itemUpd.setChangeDate(LocalDateTime.now());
+    public ItemList updateItem(ItemEdit item) {
+        Item dbObj = itemsRepository.getById(item.getId());
+        convertEditToDbObj(dbObj, item);
+        dbObj.setChangeDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
-        itemsRepository.save(itemUpd);
-        return convertDbObjToList(itemUpd);
+        itemsRepository.save(dbObj);
+        return convertDbObjToList(dbObj);
     }
-
     public void deleteItem(Item item){
         itemsRepository.delete(item);
     }
@@ -202,6 +203,17 @@ public class ItemsService {
         item.setStore(store);
 
         return item;
+    }
+
+    private void convertEditToDbObj(Item dbObj, ItemEdit itemEdit) {
+        Sale sale = saleRepository.findSaleById(itemEdit.getSaleId())
+                .orElse(null);
+
+        dbObj.setCategory(itemEdit.getCategory());
+        dbObj.setDescription(itemEdit.getDescription());
+        dbObj.setPrice(itemEdit.getPrice());
+        dbObj.setTitle(itemEdit.getTitle());
+        dbObj.setSale(sale);
     }
 
     public ItemList convertDbObjToList(Item item) {
