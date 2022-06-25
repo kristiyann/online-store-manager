@@ -47,7 +47,7 @@ public class Item implements Serializable {
 
 //    @JsonFormat(pattern = "dd/MM/yyyy")
 //    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private final LocalDateTime createDate = LocalDateTime.now();
+    private LocalDateTime createDate;
 
 //    @JsonFormat(pattern = "dd/MM/yyyy")
 //    @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -189,6 +189,10 @@ public class Item implements Serializable {
 
     public void setOrders(Set<XRefOrdersItems> orders) {
         this.orders = orders;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
     }
 
     @Override
