@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -51,6 +52,7 @@ public class Order {
 //    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 //    private Store store;
 
+    @Size(max = 5000)
     private String deliveryAddress;
 
     @OneToMany(mappedBy = "order")

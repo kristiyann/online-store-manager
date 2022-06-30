@@ -11,6 +11,7 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -35,6 +36,7 @@ public class Item implements Serializable {
     private String title;
 
     @NotNull
+    @Size(max = 5000)
     private String description;
 
     @NotNull
