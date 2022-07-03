@@ -35,6 +35,12 @@ public class SaleController {
         return new ResponseEntity<>(sales, HttpStatus.OK);
     }
 
+    @GetMapping("/All_By_Deleted")
+    public ResponseEntity<List<Sale>> getAllSalesByDeleted() {
+        List<Sale> sales = saleService.findAllSalesByDeleted(false);
+        return new ResponseEntity<>(sales, HttpStatus.OK);
+    }
+
     @PostMapping()
     public ResponseEntity<Sale> addSale(@RequestBody Sale sale) {
         Sale newSale = saleService.insertSale(sale);
@@ -45,6 +51,18 @@ public class SaleController {
     public ResponseEntity<Sale> updateSale(@RequestBody Sale sale) {
         Sale updateSale = null;
         try {
+            updateSale = saleService.updateSale(sale);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(updateSale, HttpStatus.OK);
+    }
+
+    @PutMapping("/Update_Deleted")
+    public ResponseEntity<Sale> updateSaleDeleted(@RequestBody Sale sale) {
+        Sale updateSale = null;
+        try {
+            sale.setDeleted(true);
             updateSale = saleService.updateSale(sale);
         } catch (Exception e) {
             e.printStackTrace();

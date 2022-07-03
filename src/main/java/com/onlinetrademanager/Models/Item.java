@@ -1,6 +1,7 @@
 package com.onlinetrademanager.Models;
 import com.fasterxml.jackson.annotation.*;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
+import jdk.jfr.BooleanFlag;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -50,6 +51,10 @@ public class Item implements Serializable {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate itemChangeDate;
 
+    @NotNull
+    @BooleanFlag
+    private boolean deleted;
+
     // one to one
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
@@ -71,6 +76,7 @@ public class Item implements Serializable {
         setItemPrice(item.getItemPrice());
         setStore(item.getStore());
         setSale(item.getSale());
+        setDeleted(item.isDeleted());
         setItemCreateDate(item.getItemCreateDate());
         setItemChangeDate(item.getItemChangeDate());
     }
@@ -84,6 +90,7 @@ public class Item implements Serializable {
         setItemCategory(itemCategory);
         setItemPrice(itemPrice);
         setItemCreateDate(LocalDate.now());
+        setDeleted(false);
         setStore(store);
         setSale(sale);
     }
@@ -154,6 +161,15 @@ public class Item implements Serializable {
 
     public void setStore(Store store) {
         this.store = store;
+    }
+
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override

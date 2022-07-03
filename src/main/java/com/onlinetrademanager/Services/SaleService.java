@@ -59,4 +59,8 @@ public class SaleService {
         return saleRepository.findAll();
     }
 
+    public List<Sale> findAllSalesByDeleted(boolean deleted){
+        return saleRepository.findAllSalesByDeleted(deleted);
+    }
+
 }

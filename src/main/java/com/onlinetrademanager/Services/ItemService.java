@@ -57,7 +57,11 @@ public class ItemService {
 
         Store store = storeRepository.findStoreById(id).orElseThrow(()
                 -> new ItemNotFoundException("Store " + id + "not found!"));
-        return itemRepository.findAllImagesByStore(store);
+        return itemRepository.findAllItemsByStore(store);
+    }
+
+    public List<Item> findAllItemsByDeleted(boolean deleted){
+        return itemRepository.findAllItemsByDeleted(deleted);
     }
 
 }

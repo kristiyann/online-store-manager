@@ -13,5 +13,7 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
 
     void deleteItemById(UUID id);
 
-    List<Item> findAllImagesByStore(Store store);
+    List<Item> findAllItemsByStore(Store store);
+
+    List<Item> findAllItemsByDeleted(boolean deleted);
 }
