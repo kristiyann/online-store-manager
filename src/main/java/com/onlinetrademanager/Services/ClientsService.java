@@ -4,11 +4,14 @@ import com.onlinetrademanager.DataTransferObjects.Clients.ClientEdit;
 import com.onlinetrademanager.DataTransferObjects.Clients.ClientList;
 import com.onlinetrademanager.DataTransferObjects.Relations.ItemsInClientCart;
 import com.onlinetrademanager.DataTransferObjects.XRefs.XRefClientsItemsList;
+import com.onlinetrademanager.Enums.Item.ItemCategory;
 import com.onlinetrademanager.Enums.Users.SiteTheme;
 import com.onlinetrademanager.Exceptions.NotFoundException;
+import com.onlinetrademanager.Models.ClientBlockedCategoriesOnFeed;
 import com.onlinetrademanager.Models.Item;
 import com.onlinetrademanager.Models.Users.Client;
 import com.onlinetrademanager.Models.XRefClientsItems;
+import com.onlinetrademanager.Repositories.ClientBlockedCategoriesOnFeedRepository;
 import com.onlinetrademanager.Repositories.ClientsRepository;
 import com.onlinetrademanager.Repositories.ItemsRepository;
 import com.onlinetrademanager.Repositories.XRefClientsItemsRepository;
@@ -37,18 +40,21 @@ public class ClientsService {
     private final ItemsRepository itemsRepository;
     private final ItemsService itemsService;
     private final XRefClientsItemsRepository xRefClientsItemsRepository;
+    private  final ClientBlockedCategoriesOnFeedRepository clientBlockedCategoriesOnFeedRepository;
 
     @Autowired
     public ClientsService(ClientsRepository clientsRepository,
                           BankAccountsService bankAccountsService,
                           ItemsRepository itemsRepository,
                           ItemsService itemsService,
-                          XRefClientsItemsRepository xRefClientsItemsRepository) {
+                          XRefClientsItemsRepository xRefClientsItemsRepository,
+                          ClientBlockedCategoriesOnFeedRepository clientBlockedCategoriesOnFeedRepository) {
         this.clientsRepository = clientsRepository;
         this.bankAccountsService = bankAccountsService;
         this.itemsRepository = itemsRepository;
         this.itemsService = itemsService;
         this.xRefClientsItemsRepository = xRefClientsItemsRepository;
+        this.clientBlockedCategoriesOnFeedRepository = clientBlockedCategoriesOnFeedRepository;
     }
 
     public UUID insertClient(Client client) {
@@ -139,6 +145,35 @@ public class ClientsService {
         itemsRepository.save(item);
 
         return convertDbObjToClientList(client);
+    }
+
+    // TODO Test
+    public boolean blockUnblockCategoryOnFeed(UUID clientId, ItemCategory category, boolean block) {
+        Client client = clientsRepository.findClientById(clientId)
+                .orElseThrow(() -> new NotFoundException("Client " + clientId + "not found!"));
+
+        ClientBlockedCategoriesOnFeed clientBlock;
+
+        if (block) {
+            clientBlock = clientBlockedCategoriesOnFeedRepository.findByClientAndCategory(client, category)
+                    .orElse(null);
+
+            if (clientBlock == null) {
+                clientBlock.setClient(client);
+                clientBlock.setCategory(category);
+            }
+
+            clientBlockedCategoriesOnFeedRepository.save(clientBlock);
+        } else {
+            clientBlock = clientBlockedCategoriesOnFeedRepository.findByClientAndCategory(client, category)
+                    .orElse(null);
+
+            if (clientBlock != null) {
+                clientBlockedCategoriesOnFeedRepository.delete(clientBlock);
+            }
+        }
+
+        return true;
     }
 
     /** region Converter methods **/

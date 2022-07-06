@@ -158,6 +158,14 @@ public class ItemsService {
                 .collect(Collectors.toList());
     }
 
+    public List<ItemList> findItemsByIds(List<UUID> ids) {
+        List<Item> query = itemsRepository.findItemsByIds(ids);
+
+        return query.stream()
+                .map(this::convertDbObjToList)
+                .collect(Collectors.toList());
+    }
+
     public FrontPageFeed getFrontPageItemFeed(Integer top) {
         FrontPageFeed feed = new FrontPageFeed();
 
