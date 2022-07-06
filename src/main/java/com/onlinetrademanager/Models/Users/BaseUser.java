@@ -1,5 +1,6 @@
 package com.onlinetrademanager.Models.Users;
 
+import com.onlinetrademanager.Enums.Users.SiteTheme;
 import jdk.jfr.BooleanFlag;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -39,6 +40,8 @@ public abstract class BaseUser {
 
     @Column(updatable = false, insertable = false)
     private String dtype;
+
+    private SiteTheme preferredUserTheme;
 
     public BaseUser() { }
 
@@ -95,6 +98,14 @@ public abstract class BaseUser {
 
     public void setDtype(String dtype) {
         this.dtype = dtype;
+    }
+
+    public SiteTheme getPreferredUserTheme() {
+        return preferredUserTheme;
+    }
+
+    public void setPreferredUserTheme(SiteTheme prefferedUserTheme) {
+        this.preferredUserTheme = prefferedUserTheme;
     }
 
     @Override

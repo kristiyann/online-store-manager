@@ -10,12 +10,12 @@ public class SaleList implements Serializable {
     private LocalDate startDate;
     private LocalDate endDate;
     @NotNull
-    private int salePercentage;
+    private double salePercentage;
 
     public SaleList() {
     }
 
-    public SaleList(UUID id, LocalDate startDate, LocalDate endDate, int salePercentage) {
+    public SaleList(UUID id, LocalDate startDate, LocalDate endDate, double salePercentage) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -46,11 +46,11 @@ public class SaleList implements Serializable {
         this.endDate = endDate;
     }
 
-    public int getSalePercentage() {
+    public double getSalePercentage() {
         return salePercentage;
     }
 
-    public void setSalePercentage(int salePercentage) {
+    public void setSalePercentage(double salePercentage) {
         this.salePercentage = salePercentage;
     }
 }

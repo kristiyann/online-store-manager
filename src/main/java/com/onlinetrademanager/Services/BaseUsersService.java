@@ -1,6 +1,7 @@
 package com.onlinetrademanager.Services;
 
 import com.onlinetrademanager.DataTransferObjects.BaseUsers.UserAuth;
+import com.onlinetrademanager.Enums.Users.SiteTheme;
 import com.onlinetrademanager.Exceptions.NotFoundException;
 import com.onlinetrademanager.Models.Users.BaseUser;
 import com.onlinetrademanager.Repositories.BaseUsersRepository;
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -33,5 +35,16 @@ public class BaseUsersService {
             return user;
         }
         else return null;
+    }
+
+    public void changePreferredTheme(UUID id, SiteTheme theme) {
+        BaseUser user = baseUsersRepository.findById(id)
+                .stream()
+                .filter(BaseUser::isActive)
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("User not found."));
+
+        user.setPreferredUserTheme(theme);
+        baseUsersRepository.save(user);
     }
 }

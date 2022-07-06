@@ -72,7 +72,9 @@ public class ItemsService {
     }
 
     public ItemList updateItem(ItemEdit item) {
-        Item dbObj = itemsRepository.getById(item.getId());
+        Item dbObj =  itemsRepository.findItemById(item.getId())
+                .orElseThrow(() -> new ItemNotFoundException("Item " + item.getId() + "not found!"));
+
         convertEditToDbObj(dbObj, item);
         dbObj.setChangeDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
@@ -150,6 +152,14 @@ public class ItemsService {
         query = applySorting(query, sortOrder, sortColumn);
 
         query = applyPagination(query, skip, top);
+
+        return query.stream()
+                .map(this::convertDbObjToList)
+                .collect(Collectors.toList());
+    }
+
+    public List<ItemList> findItemsByIds(List<UUID> ids) {
+        List<Item> query = itemsRepository.findItemsByIds(ids);
 
         return query.stream()
                 .map(this::convertDbObjToList)

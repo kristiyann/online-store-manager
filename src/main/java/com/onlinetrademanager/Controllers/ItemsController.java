@@ -65,6 +65,12 @@ public class ItemsController {
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
+    @GetMapping("/Ids")
+    public ResponseEntity<List<ItemList>> getAllItemsByIds(@RequestParam List<UUID> ids) {
+        List<ItemList> items = itemsService.findItemsByIds(ids);
+        return new ResponseEntity<>(items, HttpStatus.OK);
+    }
+
     @PostMapping()
     public ResponseEntity<UUID> insert(@RequestBody ItemEdit item) {
         UUID itemId = itemsService.insertItem(item);

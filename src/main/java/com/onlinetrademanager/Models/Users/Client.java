@@ -1,6 +1,8 @@
 package com.onlinetrademanager.Models.Users;
 
+import com.onlinetrademanager.Enums.Item.ItemCategory;
 import com.onlinetrademanager.Models.BankAccount;
+import com.onlinetrademanager.Models.ClientBlockedCategoriesOnFeed;
 import com.onlinetrademanager.Models.Order;
 import com.onlinetrademanager.Models.XRefClientsItems;
 
@@ -22,6 +24,9 @@ public class Client extends BaseUser implements Serializable {
 
     @OneToMany
     private Set<Order> orders;
+
+    @OneToMany
+    private Set<ClientBlockedCategoriesOnFeed> blockedCategoriesOnFeed;
 
     public Client() {
     }
