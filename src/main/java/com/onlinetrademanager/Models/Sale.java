@@ -9,6 +9,8 @@ import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -40,7 +42,9 @@ public class Sale implements Serializable {
     private LocalDate endDate;
 
     @NotNull
-    private int salePercentage;
+    @Min(0)
+    @Max(100)
+    private double salePercentage;
 
     // Relations
 
@@ -86,11 +90,11 @@ public class Sale implements Serializable {
         this.endDate = saleEndDate;
     }
 
-    public int getSalePercentage() {
+    public double getSalePercentage() {
         return salePercentage;
     }
 
-    public void setSalePercentage(int salePercentage) {
+    public void setSalePercentage(double salePercentage) {
         this.salePercentage = salePercentage;
     }
 

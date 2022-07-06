@@ -10,7 +10,7 @@ public class SaleEdit implements Serializable {
     private LocalDate startDate;
     private LocalDate endDate;
     @NotNull
-    private int salePercentage;
+    private double salePercentage;
 
     public SaleEdit() {
     }
@@ -46,11 +46,11 @@ public class SaleEdit implements Serializable {
         this.endDate = endDate;
     }
 
-    public int getSalePercentage() {
+    public double getSalePercentage() {
         return salePercentage;
     }
 
-    public void setSalePercentage(int salePercentage) {
+    public void setSalePercentage(double salePercentage) {
         this.salePercentage = salePercentage;
     }
 }

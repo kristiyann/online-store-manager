@@ -1,5 +1,6 @@
 package com.onlinetrademanager.DataTransferObjects.Users;
 
+import com.onlinetrademanager.Enums.Users.SiteTheme;
 import com.onlinetrademanager.Enums.Users.UserRole;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ public class UserList implements Serializable {
     private boolean active;
     private UserRole role;
     private String dtype;
+    private SiteTheme prefferedUserTheme;
 
     public UserList() {
     }
@@ -62,5 +64,13 @@ public class UserList implements Serializable {
 
     public void setDtype(String dtype) {
         this.dtype = dtype;
+    }
+
+    public SiteTheme getPrefferedUserTheme() {
+        return prefferedUserTheme;
+    }
+
+    public void setPrefferedUserTheme(SiteTheme prefferedUserTheme) {
+        this.prefferedUserTheme = prefferedUserTheme;
     }
 }

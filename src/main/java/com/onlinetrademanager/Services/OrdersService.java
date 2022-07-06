@@ -239,14 +239,30 @@ public class OrdersService {
             xRefOrdersItemsList.setxRefId(xRefOrdersItems.getId());
             xRefOrdersItemsList.setItemQuantity(xRefOrdersItems.getItemQuantity());
             xRefOrdersItemsList.setName(xRefOrdersItems.getItem().getTitle());
-            xRefOrdersItemsList.setPrice(xRefOrdersItems.getItem().getPrice());
+            // xRefOrdersItemsList.setPrice(xRefOrdersItems.getItem().getPrice());
+
+            if (xRefOrdersItems.getItem().getSale() != null) {
+                if (LocalDate.now().isAfter(xRefOrdersItems.getItem().getSale().getStartDate()) && LocalDate.now().isBefore(xRefOrdersItems.getItem().getSale().getEndDate())) {
+                    final double salePercentage = xRefOrdersItems.getItem().getSale().getSalePercentage();
+                    final BigDecimal itemPrice = xRefOrdersItems.getItem().getPrice();
+
+                    final double percentage = itemPrice.intValue() * salePercentage * 0.01;
+
+                    final BigDecimal newPrice = itemPrice.subtract(BigDecimal.valueOf(percentage));
+
+                    xRefOrdersItemsList.setPrice(newPrice);
+                }
+            } else {
+                xRefOrdersItemsList.setPrice(xRefOrdersItems.getItem().getPrice());
+            }
+
             if (xRefOrdersItems.getItem().getImages() != null && !xRefOrdersItems.getItem().getImages().isEmpty()) {
                 xRefOrdersItemsList.setFirstImgUrl(xRefOrdersItems.getItem().getImages().iterator().next().getUrl());
             }
 
             xRefCollection.add(xRefOrdersItemsList);
 
-            orderList.setTotalPrice(orderList.getTotalPrice().add(xRefOrdersItems.getItem().getPrice().multiply(BigDecimal.valueOf(xRefOrdersItems.getItemQuantity()))));
+            orderList.setTotalPrice(orderList.getTotalPrice().add(xRefOrdersItemsList.getPrice().multiply(BigDecimal.valueOf(xRefOrdersItems.getItemQuantity()))));
         }
         orderList.setItems(xRefCollection);
 

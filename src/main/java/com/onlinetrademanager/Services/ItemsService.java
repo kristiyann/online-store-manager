@@ -72,7 +72,9 @@ public class ItemsService {
     }
 
     public ItemList updateItem(ItemEdit item) {
-        Item dbObj = itemsRepository.getById(item.getId());
+        Item dbObj =  itemsRepository.findItemById(item.getId())
+                .orElseThrow(() -> new ItemNotFoundException("Item " + item.getId() + "not found!"));
+
         convertEditToDbObj(dbObj, item);
         dbObj.setChangeDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 

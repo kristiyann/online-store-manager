@@ -2,6 +2,7 @@ package com.onlinetrademanager.Services;
 
 import com.onlinetrademanager.DataTransferObjects.Users.UserEdit;
 import com.onlinetrademanager.DataTransferObjects.Users.UserList;
+import com.onlinetrademanager.Enums.Users.SiteTheme;
 import com.onlinetrademanager.Exceptions.NotFoundException;
 import com.onlinetrademanager.Models.Users.User;
 import com.onlinetrademanager.Repositories.UsersRepository;
@@ -31,6 +32,7 @@ public class UsersService {
     }
 
     public UUID insertUser(User user) {
+        user.setPreferredUserTheme(SiteTheme.DEFAULT);
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
         // Hashes the password, so we do not see it in the Database
 
@@ -90,6 +92,7 @@ public class UsersService {
         userList.setActive(user.isActive());
         userList.setRole(user.getRole());
         userList.setDtype(user.getDtype());
+        userList.setPrefferedUserTheme(user.getPreferredUserTheme());
 
         return userList;
     }

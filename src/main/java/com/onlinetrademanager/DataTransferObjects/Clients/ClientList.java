@@ -3,6 +3,7 @@ package com.onlinetrademanager.DataTransferObjects.Clients;
 import com.onlinetrademanager.DataTransferObjects.BankAccounts.BankAccountList;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
 import com.onlinetrademanager.DataTransferObjects.XRefs.XRefClientsItemsList;
+import com.onlinetrademanager.Enums.Users.SiteTheme;
 import com.onlinetrademanager.Enums.Users.UserRole;
 import com.onlinetrademanager.Models.BankAccount;
 import com.onlinetrademanager.Models.Item;
@@ -21,6 +22,8 @@ public class ClientList implements Serializable {
     //private Set<BankAccountList> bankAccounts = new HashSet<>();
     private Set<XRefClientsItemsList> cart;
     // private HashSet<Order> purchaseHistory;
+
+    private SiteTheme preferredUserTheme;
 
     public ClientList() {
     }
@@ -63,6 +66,13 @@ public class ClientList implements Serializable {
 
     public Set<XRefClientsItemsList> getCart() {
         return cart;
+    }
+    public void setPreferredUserTheme(SiteTheme prefferedUserTheme) {
+        this.preferredUserTheme = prefferedUserTheme;
+    }
+
+    public SiteTheme getPreferredUserTheme() {
+        return preferredUserTheme;
     }
 
     //    public void setActive(boolean active) {
