@@ -4,6 +4,7 @@ import com.onlinetrademanager.DataTransferObjects.GenericComboBox;
 import com.onlinetrademanager.DataTransferObjects.Items.FrontPageFeed;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemEdit;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
+import com.onlinetrademanager.DataTransferObjects.ResponseViewmodel;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
 import com.onlinetrademanager.Enums.SortColumn;
 import com.onlinetrademanager.Enums.SortOrder;
@@ -112,7 +113,7 @@ public class ItemsService {
                 .orElseThrow(() -> new ItemNotFoundException("Item " + id + "not found!"));
     }
 
-    public List<ItemList> findAllItems(Integer skip,
+    public ResponseViewmodel findAllItems(Integer skip,
                                        Integer top,
                                        String searchKeyword,
                                        BigDecimal priceFrom,
@@ -128,20 +129,22 @@ public class ItemsService {
 
         query = applyPagination(query, skip, top);
 
-        return query.stream()
+        List<ItemList> list = query.stream()
                 .map(this::convertDbObjToList)
                 .collect(Collectors.toList());
+
+        return new ResponseViewmodel(Collections.singletonList(list), list.stream().count());
     }
 
-    public List<ItemList> findAllItemsByStore(UUID storeId,
-                                              Integer skip,
-                                              Integer top,
-                                              String searchKeyword,
-                                              BigDecimal priceFrom,
-                                              BigDecimal priceTo,
-                                              ItemCategory category,
-                                              SortOrder sortOrder,
-                                              SortColumn sortColumn) {
+    public ResponseViewmodel findAllItemsByStore(UUID storeId,
+                                                 Integer skip,
+                                                 Integer top,
+                                                 String searchKeyword,
+                                                 BigDecimal priceFrom,
+                                                 BigDecimal priceTo,
+                                                 ItemCategory category,
+                                                 SortOrder sortOrder,
+                                                 SortColumn sortColumn) {
         Store store = storesRepository.findStoreById(storeId).orElseThrow(()
                 -> new ItemNotFoundException("Store " + storeId + "not found!"));
 
@@ -153,9 +156,11 @@ public class ItemsService {
 
         query = applyPagination(query, skip, top);
 
-        return query.stream()
+        List<ItemList> list = query.stream()
                 .map(this::convertDbObjToList)
                 .collect(Collectors.toList());
+
+        return new ResponseViewmodel(Collections.singletonList(list), list.stream().count());
     }
 
     public List<ItemList> findItemsByIds(List<UUID> ids) {

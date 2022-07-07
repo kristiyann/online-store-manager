@@ -3,6 +3,7 @@ package com.onlinetrademanager.Controllers;
 import com.onlinetrademanager.DataTransferObjects.Items.FrontPageFeed;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemEdit;
 import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
+import com.onlinetrademanager.DataTransferObjects.ResponseViewmodel;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
 import com.onlinetrademanager.Enums.SortColumn;
 import com.onlinetrademanager.Enums.SortOrder;
@@ -39,7 +40,7 @@ public class ItemsController {
     }
 
     @GetMapping("/All")
-    public ResponseEntity<List<ItemList>> getAllItems(Integer skip,
+    public ResponseEntity<ResponseViewmodel> getAllItems(Integer skip,
                                                       Integer top,
                                                       String searchKeyword,
                                                       BigDecimal priceFrom,
@@ -47,21 +48,21 @@ public class ItemsController {
                                                       ItemCategory category,
                                                       SortOrder sortOrder,
                                                       SortColumn sortColumn) {
-        List<ItemList> items = itemsService.findAllItems(skip, top, searchKeyword, priceFrom, priceTo, category, sortOrder, sortColumn);
+        ResponseViewmodel items = itemsService.findAllItems(skip, top, searchKeyword, priceFrom, priceTo, category, sortOrder, sortColumn);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
     @GetMapping("/Store")
-    public ResponseEntity<List<ItemList>> getAllItemsByStore(@RequestParam UUID storeId,
-                                                             Integer skip,
-                                                             Integer top,
-                                                             String searchKeyword,
-                                                             BigDecimal priceFrom,
-                                                             BigDecimal priceTo,
-                                                             ItemCategory category,
-                                                             SortOrder sortOrder,
-                                                             SortColumn sortColumn) {
-        List<ItemList> items = itemsService.findAllItemsByStore(storeId, skip, top, searchKeyword, priceFrom, priceTo, category, sortOrder, sortColumn);
+    public ResponseEntity<ResponseViewmodel> getAllItemsByStore(@RequestParam UUID storeId,
+                                                                Integer skip,
+                                                                Integer top,
+                                                                String searchKeyword,
+                                                                BigDecimal priceFrom,
+                                                                BigDecimal priceTo,
+                                                                ItemCategory category,
+                                                                SortOrder sortOrder,
+                                                                SortColumn sortColumn) {
+        ResponseViewmodel items = itemsService.findAllItemsByStore(storeId, skip, top, searchKeyword, priceFrom, priceTo, category, sortOrder, sortColumn);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
