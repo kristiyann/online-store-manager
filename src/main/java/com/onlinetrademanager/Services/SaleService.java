@@ -37,7 +37,8 @@ public class SaleService {
         return saleUpd;
     }
 
-    public Sale updateSaleDeleted(Sale sale){
+    public Sale updateSaleDeleted(Sale sale)
+    {
         Sale saleUpd = new Sale(sale);
         saleUpd.setDeleted(true);
         saleRepository.save(saleUpd);
