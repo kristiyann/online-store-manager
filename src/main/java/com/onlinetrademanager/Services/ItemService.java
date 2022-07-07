@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,12 +27,20 @@ public class ItemService {
     }
 
     public Item insertItem(Item item){
+        item.setDeleted(false);
         itemRepository.save(item);
         return item;
     }
 
     public Item updateItem(Item item){
         Item itemUpd = new Item(item);
+        itemRepository.save(itemUpd);
+        return itemUpd;
+    }
+
+    public Item updateItemDeleted(Item item){
+        Item itemUpd = new Item(item);
+        item.setDeleted(true);
         itemRepository.save(itemUpd);
         return itemUpd;
     }
@@ -50,7 +59,7 @@ public class ItemService {
     }
 
     public List<Item> findAllItems(){
-        return itemRepository.findAll();
+        return itemRepository.findAll().stream().filter(a -> a.isDeleted()).collect(Collectors.toList());
     }
 
     public List<Item> findAllItemsByStore(UUID id){
@@ -60,8 +69,10 @@ public class ItemService {
         return itemRepository.findAllItemsByStore(store);
     }
 
+    /*
     public List<Item> findAllItemsByDeleted(boolean deleted){
         return itemRepository.findAllItemsByDeleted(deleted);
     }
+    */
 
 }

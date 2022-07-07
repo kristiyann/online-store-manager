@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,12 +26,20 @@ public class SaleService {
     }
 
     public Sale insertSale(Sale sale){
+        sale.setDeleted(false);
         saleRepository.save(sale);
         return sale;
     }
 
     public Sale updateSale(Sale sale){
         Sale saleUpd = new Sale(sale);
+        saleRepository.save(saleUpd);
+        return saleUpd;
+    }
+
+    public Sale updateSaleDeleted(Sale sale){
+        Sale saleUpd = new Sale(sale);
+        saleUpd.setDeleted(true);
         saleRepository.save(saleUpd);
         return saleUpd;
     }
@@ -56,11 +65,12 @@ public class SaleService {
     }
 
     public List<Sale> findAllSales(){
-        return saleRepository.findAll();
+        return saleRepository.findAll().stream().filter(a -> !a.isDeleted()).collect(Collectors.toList());
     }
 
+    /*
     public List<Sale> findAllSalesByDeleted(boolean deleted){
         return saleRepository.findAllSalesByDeleted(deleted);
     }
-
+    */
 }

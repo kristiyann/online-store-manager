@@ -35,11 +35,13 @@ public class SaleController {
         return new ResponseEntity<>(sales, HttpStatus.OK);
     }
 
+    /*
     @GetMapping("/All_By_Deleted")
     public ResponseEntity<List<Sale>> getAllSalesByDeleted() {
         List<Sale> sales = saleService.findAllSalesByDeleted(false);
         return new ResponseEntity<>(sales, HttpStatus.OK);
     }
+     */
 
     @PostMapping()
     public ResponseEntity<Sale> addSale(@RequestBody Sale sale) {
@@ -62,8 +64,7 @@ public class SaleController {
     public ResponseEntity<Sale> updateSaleDeleted(@RequestBody Sale sale) {
         Sale updateSale = null;
         try {
-            sale.setDeleted(true);
-            updateSale = saleService.updateSale(sale);
+            updateSale = saleService.updateSaleDeleted(sale);
         } catch (Exception e) {
             e.printStackTrace();
         }
