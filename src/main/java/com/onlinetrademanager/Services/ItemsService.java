@@ -133,7 +133,7 @@ public class ItemsService {
                 .map(this::convertDbObjToList)
                 .collect(Collectors.toList());
 
-        return new ResponseViewmodel(Collections.singletonList(list), list.stream().count());
+        return new ResponseViewmodel(list, list.stream().count());
     }
 
     public ResponseViewmodel findAllItemsByStore(UUID storeId,
@@ -160,7 +160,7 @@ public class ItemsService {
                 .map(this::convertDbObjToList)
                 .collect(Collectors.toList());
 
-        return new ResponseViewmodel(Collections.singletonList(list), list.stream().count());
+        return new ResponseViewmodel(list, list.stream().count());
     }
 
     public List<ItemList> findItemsByIds(List<UUID> ids) {

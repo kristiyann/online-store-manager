@@ -1,12 +1,14 @@
 package com.onlinetrademanager.DataTransferObjects;
 
+import com.onlinetrademanager.DataTransferObjects.Items.ItemList;
+
 import java.util.List;
 
 public class ResponseViewmodel {
-    private List<Object> results;
+    private List<ItemList> results;
     private Long count;
 
-    public ResponseViewmodel(List<Object> results, Long count) {
+    public ResponseViewmodel(List<ItemList> results, Long count) {
         this.results = results;
         this.count = count;
     }
@@ -15,7 +17,7 @@ public class ResponseViewmodel {
         return count;
     }
 
-    public List<Object> getResults() {
+    public List<ItemList> getResults() {
         return results;
     }
 
@@ -23,7 +25,7 @@ public class ResponseViewmodel {
         this.count = count;
     }
 
-    public void setResults(List<Object> results) {
+    public void setResults(List<ItemList> results) {
         this.results = results;
     }
 }
