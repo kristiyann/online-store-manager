@@ -34,6 +34,14 @@ public class SaleController {
         return new ResponseEntity<>(sales, HttpStatus.OK);
     }
 
+    /*
+    @GetMapping("/All_By_Deleted")
+    public ResponseEntity<List<Sale>> getAllSalesByDeleted() {
+        List<Sale> sales = saleService.findAllSalesByDeleted(false);
+        return new ResponseEntity<>(sales, HttpStatus.OK);
+    }
+     */
+
     @PostMapping()
     public ResponseEntity<Sale> addSale(@RequestBody SaleEdit sale) {
         Sale newSale = saleService.insertSale(sale);
@@ -51,10 +59,17 @@ public class SaleController {
         return new ResponseEntity<>(updateSale, HttpStatus.OK);
     }
 
-    @DeleteMapping()
-    public ResponseEntity<?> deleteSale(@RequestParam UUID id) {
-        saleService.deleteSaleById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/Delete")
+    public ResponseEntity<Boolean> updateSaleDeleted(@RequestParam UUID id) {
+        saleService.updateSaleDeleted(id);
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
+
+//    @DeleteMapping()
+//    public ResponseEntity<?> deleteSale(@RequestParam UUID id) {
+//        saleService.deleteSaleById(id);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 }
 

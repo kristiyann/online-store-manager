@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
+import jdk.jfr.BooleanFlag;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.lang.Nullable;
@@ -73,6 +74,9 @@ public class Item implements Serializable {
     @OneToMany(mappedBy = "item")
     private Set<XRefOrdersItems> orders = new HashSet<>();
 
+    @NotNull
+    @BooleanFlag
+    private boolean deleted;
 
     public Item() {
     }
@@ -195,6 +199,14 @@ public class Item implements Serializable {
 
     public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     @Override

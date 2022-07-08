@@ -89,9 +89,10 @@ public class ItemsController {
         return new ResponseEntity<>(updateItem, HttpStatus.OK);
     }
 
-    @DeleteMapping()
-    public ResponseEntity<?> deleteItem(@RequestParam UUID id) {
-        itemsService.deleteItemById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/Delete")
+    public ResponseEntity<Boolean> updateSaleDeleted(@RequestParam UUID id) {
+        itemsService.updateItemDeleted(id);
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

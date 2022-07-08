@@ -3,9 +3,7 @@ package com.onlinetrademanager.Services;
 
 import com.onlinetrademanager.DataTransferObjects.Sales.SaleEdit;
 import com.onlinetrademanager.DataTransferObjects.Sales.SaleList;
-import com.onlinetrademanager.Exceptions.ItemNotFoundException;
 import com.onlinetrademanager.Exceptions.SaleNotFoundException;
-import com.onlinetrademanager.Models.Item;
 import com.onlinetrademanager.Models.Sale;
 import com.onlinetrademanager.Repositories.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,7 @@ public class SaleService {
 
     public Sale insertSale(SaleEdit sale){
         Sale insert = convertEditToDbObj(sale);
+        insert.setDeleted(false);
         saleRepository.save(insert);
         return insert;
     }
@@ -37,6 +36,18 @@ public class SaleService {
         Sale saleUpd = convertEditToDbObj(sale);
         saleRepository.save(saleUpd);
         return saleUpd;
+    }
+
+    public void updateSaleDeleted(UUID id)
+    {
+        Sale dbObj = saleRepository.findSaleById(id)
+                .stream()
+                .filter(a -> !a.isDeleted())
+                .findFirst()
+                .orElseThrow(() -> new SaleNotFoundException("Sale " + id + "not found!"));
+
+        dbObj.setDeleted(true);
+        saleRepository.save(dbObj);
     }
 
     public void deleteSale(Sale sale){
@@ -50,6 +61,7 @@ public class SaleService {
     public SaleList findSaleById(UUID id){
         return saleRepository.findSaleById(id)
                 .stream()
+                .filter(a -> !a.isDeleted())
                 .map(this::convertDbObjToList)
                 .findFirst()
                 .orElseThrow(
@@ -66,6 +78,7 @@ public class SaleService {
     public List<SaleList> findAllSales(){
         return saleRepository.findAll()
                 .stream()
+                .filter(a -> !a.isDeleted())
                 .map(this::convertDbObjToList)
                 .collect(Collectors.toList());
     }

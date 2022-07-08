@@ -56,6 +56,7 @@ public class ItemsService {
         Item dbObj = convertEditToDbObj(item);
         dbObj.setCreateDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         dbObj.setChangeDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        dbObj.setDeleted(false);
 
         Set<Image> images = new HashSet<>();
         for (String url : item.getImageUrls()) {
@@ -74,6 +75,7 @@ public class ItemsService {
 
     public ItemList updateItem(ItemEdit item) {
         Item dbObj =  itemsRepository.findItemById(item.getId())
+                .filter(a -> !a.isDeleted())
                 .orElseThrow(() -> new ItemNotFoundException("Item " + item.getId() + "not found!"));
 
         convertEditToDbObj(dbObj, item);
@@ -82,6 +84,16 @@ public class ItemsService {
         itemsRepository.save(dbObj);
         return convertDbObjToList(dbObj);
     }
+
+    public void updateItemDeleted(UUID id){
+        Item dbObj =  itemsRepository.findItemById(id)
+                .filter(a -> !a.isDeleted())
+                .orElseThrow(() -> new ItemNotFoundException("Item " + id + "not found!"));
+
+        dbObj.setDeleted(true);
+        itemsRepository.save(dbObj);
+    }
+
     public void deleteItem(Item item){
         itemsRepository.delete(item);
     }
@@ -108,6 +120,7 @@ public class ItemsService {
     public ItemList findItemById(UUID id){
         return itemsRepository.findItemById(id)
                 .stream()
+                .filter(a -> !a.isDeleted())
                 .map(this::convertDbObjToList)
                 .findFirst()
                 .orElseThrow(() -> new ItemNotFoundException("Item " + id + "not found!"));
@@ -121,7 +134,7 @@ public class ItemsService {
                                        ItemCategory category,
                                        SortOrder sortOrder,
                                        SortColumn sortColumn){
-        List<Item> query = itemsRepository.findAll();
+        List<Item> query = itemsRepository.findAll().stream().filter(a -> !a.isDeleted()).collect(Collectors.toList());
 
         query = applyFiltering(query, searchKeyword, priceFrom, priceTo, category);
 
@@ -145,10 +158,11 @@ public class ItemsService {
                                                  ItemCategory category,
                                                  SortOrder sortOrder,
                                                  SortColumn sortColumn) {
-        Store store = storesRepository.findStoreById(storeId).orElseThrow(()
+        Store store = storesRepository.findStoreById(storeId)
+                .orElseThrow(()
                 -> new ItemNotFoundException("Store " + storeId + "not found!"));
 
-        List<Item> query =  itemsRepository.findAllItemsByStore(store);
+        List<Item> query =  itemsRepository.findAllItemsByStore(store).stream().filter(a -> !a.isDeleted()).collect(Collectors.toList());
 
         query = applyFiltering(query, searchKeyword, priceFrom, priceTo, category);
 
@@ -178,7 +192,7 @@ public class ItemsService {
             top = 5;
         }
 
-        List<Item> query = itemsRepository.findAll();
+        List<Item> query = itemsRepository.findAll().stream().filter(a -> !a.isDeleted()).collect(Collectors.toList());
         query = applySorting(query, SortOrder.DESC, SortColumn.CREATEDATE);
 
         feed.setItemsVehicle(this.generateCategorisedList(query, top, ItemCategory.VEHICLES));
@@ -197,6 +211,7 @@ public class ItemsService {
 
     private Item convertEditToDbObj(ItemEdit itemEdit) {
         Item item = itemsRepository.findItemById(itemEdit.getId())
+                .filter(a -> !a.isDeleted())
                 .orElse(null);
 
         if (item == null) {
@@ -204,9 +219,11 @@ public class ItemsService {
         }
 
         Store store = storesRepository.findStoreById(itemEdit.getStoreId())
+                .filter(a -> !a.getActive())
                 .orElseThrow(() -> new StoreNotFoundException("Store with id" + itemEdit.getStoreId() + "not found."));
 
         Sale sale = saleRepository.findSaleById(itemEdit.getSaleId())
+                .filter(a -> !a.isDeleted())
                 .orElse(null);
 
         item.setId(itemEdit.getId());
@@ -222,6 +239,7 @@ public class ItemsService {
 
     private void convertEditToDbObj(Item dbObj, ItemEdit itemEdit) {
         Sale sale = saleRepository.findSaleById(itemEdit.getSaleId())
+                .filter(a -> !a.isDeleted())
                 .orElse(null);
 
         dbObj.setCategory(itemEdit.getCategory());
@@ -329,6 +347,7 @@ public class ItemsService {
     private List<ItemList> generateCategorisedList(List<Item> query, Integer top, ItemCategory category) {
         List<ItemList> categorisedList = query.stream()
                 .filter(item -> item.getCategory().equals(category))
+                .filter(a -> !a.isDeleted())
                 .limit(top)
                 .map(this::convertDbObjToList)
                 .collect(Collectors.toList());

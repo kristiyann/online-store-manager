@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jdk.jfr.BooleanFlag;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -51,6 +52,10 @@ public class Sale implements Serializable {
     @OneToMany
     @JoinColumn(name = "sale_id", nullable = true)
     private Set<Item> items = new HashSet<>();
+
+    @NotNull
+    @BooleanFlag
+    private boolean deleted;
 
     public Sale() {
     }
@@ -104,5 +109,13 @@ public class Sale implements Serializable {
 
     public void setItems(Set<Item> items) {
         this.items = items;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
