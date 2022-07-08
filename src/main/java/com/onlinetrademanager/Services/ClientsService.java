@@ -81,6 +81,7 @@ public class ClientsService {
     public List<ClientList> findAllClients() {
         return clientsRepository.findAll()
                 .stream()
+                .filter(Client::isActive)
                 .map(this::convertDbObjToClientList)
                 .collect(Collectors.toList());
     }

@@ -78,9 +78,9 @@ public class UsersController {
         else return new ResponseEntity<>(updated, HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping
-    public ResponseEntity<Boolean> changeTheme(@RequestParam UUID userId, SiteTheme theme) {
+    @PutMapping("/ChangeTheme")
+    public ResponseEntity<Boolean> changeTheme(@RequestParam UUID userId,@RequestParam SiteTheme theme) {
         baseUsersService.changePreferredTheme(userId, theme);
-        return new ResponseEntity<>(true, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

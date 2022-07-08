@@ -1,5 +1,6 @@
 package com.onlinetrademanager.DataTransferObjects.Users;
 
+import com.onlinetrademanager.Enums.Users.SiteTheme;
 import com.onlinetrademanager.Enums.Users.UserRole;
 
 import javax.validation.constraints.Email;
@@ -23,6 +24,8 @@ public class UserEdit implements Serializable {
     @NotNull
     private UserRole role;
 
+    private SiteTheme prefferedUserTheme;
+
     public UserEdit() {
     }
 
@@ -33,6 +36,14 @@ public class UserEdit implements Serializable {
         this.password = password;
         this.active = active;
         this.role = role;
+    }
+
+    public SiteTheme getPrefferedUserTheme() {
+        return prefferedUserTheme;
+    }
+
+    public void setPrefferedUserTheme(SiteTheme theme) {
+        this.prefferedUserTheme = theme;
     }
 
     public UUID getId() {

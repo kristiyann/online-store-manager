@@ -106,6 +106,7 @@ public class UsersService {
         user.setActive(model.isActive());
         user.setRole(model.getRole());
         user.setPassword(model.getPassword());
+        user.setPreferredUserTheme(model.getPrefferedUserTheme());
 
         return user;
     }

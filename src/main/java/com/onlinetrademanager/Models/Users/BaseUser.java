@@ -44,7 +44,6 @@ public abstract class BaseUser {
 
     private SiteTheme preferredUserTheme;
 
-    @NotNull
     @Enumerated
     private UserRole role;
 
