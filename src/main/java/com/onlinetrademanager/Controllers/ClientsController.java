@@ -46,6 +46,12 @@ public class ClientsController {
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 
+    @GetMapping()
+    public ResponseEntity<ClientList> getClient(@RequestParam UUID id) {
+        ClientList client = clientsService.findClientById(id);
+        return new ResponseEntity<>(client, HttpStatus.OK);
+    }
+
     @PutMapping
     public ResponseEntity<Boolean> updateClient(@RequestBody ClientEdit client) {
         boolean updated = clientsService.updateClient(client);

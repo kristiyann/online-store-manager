@@ -6,6 +6,7 @@ import com.onlinetrademanager.DataTransferObjects.Relations.ItemsInClientCart;
 import com.onlinetrademanager.DataTransferObjects.XRefs.XRefClientsItemsList;
 import com.onlinetrademanager.Enums.Item.ItemCategory;
 import com.onlinetrademanager.Enums.Users.SiteTheme;
+import com.onlinetrademanager.Enums.Users.UserRole;
 import com.onlinetrademanager.Exceptions.NotFoundException;
 import com.onlinetrademanager.Models.ClientBlockedCategoriesOnFeed;
 import com.onlinetrademanager.Models.Item;
@@ -60,6 +61,7 @@ public class ClientsService {
     public UUID insertClient(Client client) {
         client.setPreferredUserTheme(SiteTheme.DEFAULT);
         client.setPassword(BCrypt.hashpw(client.getPassword(), BCrypt.gensalt(12)));
+        client.setRole(UserRole.CLIENT);
         // Hashes the password, so we do not see it in the Database
 
         clientsRepository.save(client);

@@ -28,6 +28,7 @@ public class ItemList implements Serializable {
     private LocalDateTime changeDate;
     private List<String> images = new ArrayList<>();
     private GenericComboBox store;
+    private double salePercentage;
 
     public ItemList() {
     }
@@ -44,6 +45,14 @@ public class ItemList implements Serializable {
 
     public UUID getId() {
         return id;
+    }
+
+    public double getSalePercentage() {
+        return salePercentage;
+    }
+
+    public void setSalePercentage(double salePercentage) {
+        this.salePercentage = salePercentage;
     }
 
     public void setId(UUID id) {

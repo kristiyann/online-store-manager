@@ -1,6 +1,7 @@
 package com.onlinetrademanager.Models.Users;
 
 import com.onlinetrademanager.Enums.Users.SiteTheme;
+import com.onlinetrademanager.Enums.Users.UserRole;
 import jdk.jfr.BooleanFlag;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -42,6 +43,10 @@ public abstract class BaseUser {
     private String dtype;
 
     private SiteTheme preferredUserTheme;
+
+    @NotNull
+    @Enumerated
+    private UserRole role;
 
     public BaseUser() { }
 
@@ -106,6 +111,14 @@ public abstract class BaseUser {
 
     public void setPreferredUserTheme(SiteTheme prefferedUserTheme) {
         this.preferredUserTheme = prefferedUserTheme;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     @Override

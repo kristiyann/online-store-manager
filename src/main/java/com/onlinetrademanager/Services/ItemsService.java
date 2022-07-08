@@ -279,6 +279,7 @@ public class ItemsService {
                 BigDecimal newPrice = item.getPrice().subtract(BigDecimal.valueOf(percentage));
 
                 itemList.setPrice(newPrice);
+                itemList.setSalePercentage(item.getSale().getSalePercentage());
             }
         } else {
             itemList.setPrice(item.getPrice());

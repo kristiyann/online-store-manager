@@ -3,6 +3,7 @@ package com.onlinetrademanager.Controllers;
 import com.onlinetrademanager.DataTransferObjects.BaseUsers.UserAuth;
 import com.onlinetrademanager.DataTransferObjects.Users.UserEdit;
 import com.onlinetrademanager.DataTransferObjects.Users.UserList;
+import com.onlinetrademanager.Enums.Users.SiteTheme;
 import com.onlinetrademanager.Models.Users.BaseUser;
 import com.onlinetrademanager.Models.Users.User;
 import com.onlinetrademanager.Services.BaseUsersService;
@@ -50,12 +51,12 @@ public class UsersController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/Auth")
-    public ResponseEntity<UUID> authUser(@RequestBody UserAuth userAuth) {
-        BaseUser user = baseUsersService.authUser(userAuth);
+    @PutMapping("/Auth")
+    public ResponseEntity<UserList> authUser(@RequestBody UserAuth userAuth) {
+        UserList user = baseUsersService.authUser(userAuth);
 
         if (user != null){
-            return new ResponseEntity<>(user.getId(), HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         }
         else{
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -75,5 +76,11 @@ public class UsersController {
             return new ResponseEntity<>(updated, HttpStatus.OK);
         }
         else return new ResponseEntity<>(updated, HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping
+    public ResponseEntity<Boolean> changeTheme(@RequestParam UUID userId, SiteTheme theme) {
+        baseUsersService.changePreferredTheme(userId, theme);
+        return new ResponseEntity<>(true, HttpStatus.BAD_REQUEST);
     }
 }
