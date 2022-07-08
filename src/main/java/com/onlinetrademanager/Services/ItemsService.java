@@ -287,7 +287,7 @@ public class ItemsService {
         Stream<Item> stream = query.stream();
 
         if (searchKeyword != null) {
-            stream = stream.filter(item -> item.getTitle().contains(searchKeyword));
+            stream = stream.filter(item -> item.getTitle().toLowerCase().contains(searchKeyword.toLowerCase()));
         }
 
         if (priceFrom != null) {
