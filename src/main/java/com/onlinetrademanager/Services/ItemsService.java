@@ -11,6 +11,7 @@ import com.onlinetrademanager.Enums.SortOrder;
 import com.onlinetrademanager.Exceptions.ItemNotFoundException;
 import com.onlinetrademanager.Exceptions.StoreNotFoundException;
 import com.onlinetrademanager.Models.*;
+import com.onlinetrademanager.Models.Users.Client;
 import com.onlinetrademanager.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ public class ItemsService {
     public final ClientsRepository clientsRepository;
     public final XRefOrdersItemsRepository xRefOrdersItemsRepository;
     public final XRefClientsItemsRepository xRefClientsItemsRepository;
+    public final ClientBlockedCategoriesOnFeedRepository clientBlockedCategoriesOnFeedRepository;
 
     @Autowired
     public ItemsService(ItemsRepository itemsRepository,
@@ -42,7 +44,8 @@ public class ItemsService {
                         ImageRepository imageRepository,
                         ClientsRepository clientsRepository,
                         XRefOrdersItemsRepository xRefOrdersItemsRepository,
-                        XRefClientsItemsRepository xRefClientsItemsRepository){
+                        XRefClientsItemsRepository xRefClientsItemsRepository,
+    ClientBlockedCategoriesOnFeedRepository clientBlockedCategoriesOnFeedRepository){
         this.itemsRepository = itemsRepository;
         this.storesRepository = storesRepository;
         this.saleRepository = saleRepository;
@@ -50,6 +53,7 @@ public class ItemsService {
         this.clientsRepository = clientsRepository;
         this.xRefOrdersItemsRepository = xRefOrdersItemsRepository;
         this.xRefClientsItemsRepository = xRefClientsItemsRepository;
+        this.clientBlockedCategoriesOnFeedRepository = clientBlockedCategoriesOnFeedRepository;
     }
 
     public UUID insertItem(ItemEdit item) {
@@ -185,8 +189,9 @@ public class ItemsService {
                 .collect(Collectors.toList());
     }
 
-    public FrontPageFeed getFrontPageItemFeed(Integer top) {
+    public FrontPageFeed getFrontPageItemFeed(Integer top, UUID clientId) {
         FrontPageFeed feed = new FrontPageFeed();
+        Client client = clientsRepository.findClientById(clientId).orElse(null);
 
         if (top == null || top == 0 || top > 50) {
             top = 5;
@@ -195,14 +200,14 @@ public class ItemsService {
         List<Item> query = itemsRepository.findAll().stream().filter(a -> !a.isDeleted()).collect(Collectors.toList());
         query = applySorting(query, SortOrder.DESC, SortColumn.CREATEDATE);
 
-        feed.setItemsVehicle(this.generateCategorisedList(query, top, ItemCategory.VEHICLES));
-        feed.setItemsAntiques(this.generateCategorisedList(query, top, ItemCategory.ANTIQUES));
-        feed.setItemsClothes(this.generateCategorisedList(query, top, ItemCategory.CLOTHES));
-        feed.setItemsGames(this.generateCategorisedList(query, top, ItemCategory.GAMES));
-        feed.setItemsOther(this.generateCategorisedList(query, top, ItemCategory.OTHER));
-        feed.setItemsElectronics(this.generateCategorisedList(query, top, ItemCategory.ELECTRONICS));
-        feed.setItemsSportHobby(this.generateCategorisedList(query, top, ItemCategory.SPORTANDHOBBY));
-        feed.setItemsPets(this.generateCategorisedList(query, top, ItemCategory.PETS));
+        feed.setItemsVehicle(this.generateCategorisedList(query, top, ItemCategory.VEHICLES, client));
+        feed.setItemsAntiques(this.generateCategorisedList(query, top, ItemCategory.ANTIQUES, client));
+        feed.setItemsClothes(this.generateCategorisedList(query, top, ItemCategory.CLOTHES, client));
+        feed.setItemsGames(this.generateCategorisedList(query, top, ItemCategory.GAMES, client));
+        feed.setItemsOther(this.generateCategorisedList(query, top, ItemCategory.OTHER, client));
+        feed.setItemsElectronics(this.generateCategorisedList(query, top, ItemCategory.ELECTRONICS, client));
+        feed.setItemsSportHobby(this.generateCategorisedList(query, top, ItemCategory.SPORTANDHOBBY, client));
+        feed.setItemsPets(this.generateCategorisedList(query, top, ItemCategory.PETS, client));
 
         return feed;
     }
@@ -345,7 +350,18 @@ public class ItemsService {
         return stream.collect(Collectors.toList());
     }
 
-    private List<ItemList> generateCategorisedList(List<Item> query, Integer top, ItemCategory category) {
+    private List<ItemList> generateCategorisedList(List<Item> query, Integer top, ItemCategory category, Client client) {
+        if (client != null) {
+            ClientBlockedCategoriesOnFeed clientBlockedCategoriesOnFeed = clientBlockedCategoriesOnFeedRepository.findByClientAndCategory(client, category)
+                    .orElse(null);
+
+            if (clientBlockedCategoriesOnFeed != null) {
+                    List<ItemList> emptyList = new ArrayList<>();
+                    return emptyList;
+            }
+
+        }
+
         List<ItemList> categorisedList = query.stream()
                 .filter(item -> item.getCategory().equals(category))
                 .filter(a -> !a.isDeleted())

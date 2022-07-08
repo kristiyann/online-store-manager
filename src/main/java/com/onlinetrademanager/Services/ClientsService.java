@@ -162,6 +162,7 @@ public class ClientsService {
                     .orElse(null);
 
             if (clientBlock == null) {
+                clientBlock = new ClientBlockedCategoriesOnFeed();
                 clientBlock.setClient(client);
                 clientBlock.setCategory(category);
             }

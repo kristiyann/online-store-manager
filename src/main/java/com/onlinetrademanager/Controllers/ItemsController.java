@@ -10,8 +10,10 @@ import com.onlinetrademanager.Enums.SortOrder;
 import com.onlinetrademanager.Services.ItemsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Null;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -34,8 +36,8 @@ public class ItemsController {
     }
 
     @GetMapping("/Feed")
-    public ResponseEntity<FrontPageFeed> getItem(Integer top) {
-        FrontPageFeed feed = itemsService.getFrontPageItemFeed(top);
+    public ResponseEntity<FrontPageFeed> getItem(@RequestParam UUID clientId, Integer top) {
+        FrontPageFeed feed = itemsService.getFrontPageItemFeed(top, clientId);
         return new ResponseEntity<>(feed, HttpStatus.OK);
     }
 

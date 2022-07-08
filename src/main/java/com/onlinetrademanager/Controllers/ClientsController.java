@@ -3,6 +3,7 @@ package com.onlinetrademanager.Controllers;
 import com.onlinetrademanager.DataTransferObjects.Clients.ClientEdit;
 import com.onlinetrademanager.DataTransferObjects.Clients.ClientList;
 import com.onlinetrademanager.DataTransferObjects.Relations.ItemsInClientCart;
+import com.onlinetrademanager.Enums.Item.ItemCategory;
 import com.onlinetrademanager.Models.Users.Client;
 import com.onlinetrademanager.Services.ClientsService;
 import org.springframework.http.HttpStatus;
@@ -66,5 +67,12 @@ public class ClientsController {
         ClientList clientList = clientsService.addRemoveItemToCart(itemsInClientCart);
 
         return new ResponseEntity<>(clientList, HttpStatus.OK);
+    }
+
+    @PutMapping("/BlockUnblockCategory")
+    public ResponseEntity<Boolean> blockUnblockCategory(@RequestParam UUID clientId,@RequestParam ItemCategory category,@RequestParam boolean block) {
+        clientsService.blockUnblockCategoryOnFeed(clientId, category, block);
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

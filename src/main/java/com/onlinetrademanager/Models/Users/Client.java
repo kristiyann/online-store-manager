@@ -59,6 +59,14 @@ public class Client extends BaseUser implements Serializable {
         this.cart = cart;
     }
 
+    public Set<ClientBlockedCategoriesOnFeed> getBlockedCategoriesOnFeed() {
+        return blockedCategoriesOnFeed;
+    }
+
+    public void setBlockedCategoriesOnFeed(Set<ClientBlockedCategoriesOnFeed> blockedCategoriesOnFeed) {
+        this.blockedCategoriesOnFeed = blockedCategoriesOnFeed;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
