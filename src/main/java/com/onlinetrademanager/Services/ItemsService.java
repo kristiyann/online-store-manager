@@ -191,7 +191,13 @@ public class ItemsService {
 
     public FrontPageFeed getFrontPageItemFeed(Integer top, UUID clientId) {
         FrontPageFeed feed = new FrontPageFeed();
-        Client client = clientsRepository.findClientById(clientId).orElse(null);
+
+        Client client;
+        if (clientId != null) {
+            client = clientsRepository.findClientById(clientId).orElse(null);
+        } else {
+            client = null;
+        }
 
         if (top == null || top == 0 || top > 50) {
             top = 5;
@@ -285,6 +291,7 @@ public class ItemsService {
 
                 itemList.setPrice(newPrice);
                 itemList.setSalePercentage(item.getSale().getSalePercentage());
+                itemList.setSaleId(item.getSale().getId());
             }
         } else {
             itemList.setPrice(item.getPrice());

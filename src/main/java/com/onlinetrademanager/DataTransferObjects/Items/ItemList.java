@@ -29,6 +29,7 @@ public class ItemList implements Serializable {
     private List<String> images = new ArrayList<>();
     private GenericComboBox store;
     private double salePercentage;
+    private UUID saleId;
 
     public ItemList() {
     }
@@ -41,6 +42,14 @@ public class ItemList implements Serializable {
         this.price = price;
         this.createDate = createDate;
         this.changeDate = changeDate;
+    }
+
+    public UUID getSaleId() {
+        return saleId;
+    }
+
+    public void setSaleId(UUID saleId) {
+        this.saleId = saleId;
     }
 
     public UUID getId() {

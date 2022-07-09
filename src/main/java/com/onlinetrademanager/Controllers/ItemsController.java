@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Null;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -36,8 +37,8 @@ public class ItemsController {
     }
 
     @GetMapping("/Feed")
-    public ResponseEntity<FrontPageFeed> getItem(@RequestParam UUID clientId, Integer top) {
-        FrontPageFeed feed = itemsService.getFrontPageItemFeed(top, clientId);
+    public ResponseEntity<FrontPageFeed> getItem(@RequestParam Optional<UUID> clientId, Integer top) {
+        FrontPageFeed feed = itemsService.getFrontPageItemFeed(top, clientId.orElse(null));
         return new ResponseEntity<>(feed, HttpStatus.OK);
     }
 
