@@ -230,7 +230,7 @@ public class ItemsService {
         }
 
         Store store = storesRepository.findStoreById(itemEdit.getStoreId())
-                .filter(a -> !a.getActive())
+                .filter(a -> a.getActive())
                 .orElseThrow(() -> new StoreNotFoundException("Store with id" + itemEdit.getStoreId() + "not found."));
 
         Sale sale = saleRepository.findSaleById(itemEdit.getSaleId())
